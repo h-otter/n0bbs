@@ -9,7 +9,7 @@ from django.utils import timezone
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from bbs.models import Response, Thread
+from bbs.models import Response, Thread, ReadLog
 
 
 # TODO: コメントのレンダリング
@@ -43,17 +43,14 @@ class ThreadConsumer(AsyncWebsocketConsumer):
             },
         }))
 
-    # @database_sync_to_async
-    # def markRead(self, thread_id, message):
-    #     Response.objects.create(
-    #         thread_id=thread_id,
-    #         responded_by=self.scope["user"],
-    #         display_name=message["display_name"],
-    #         comment=message["comment"],
-    #     )
+    @database_sync_to_async
+    def markRead(self, thread_id, user):
+        log, _ = ReadLog.objects.get_or_create(thread_id=thread_id, user=user)
+        log.response = log.thread.responses.last()
+        log.save()
 
     async def disconnect(self, close_code):
-        # 既読をつける
+        await self.markRead(self.room_name, self.scope["user"])
 
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -62,10 +59,10 @@ class ThreadConsumer(AsyncWebsocketConsumer):
         # await self.close()
 
     @database_sync_to_async
-    def saveResponse(self, thread_id, message):
+    def saveResponse(self, thread_id, message, user):
         return Response.objects.create(
             thread_id=thread_id,
-            responded_by=self.scope["user"],
+            responded_by=user,
             display_name=message["display_name"],
             comment=message["comment"],
         ).get_dict()
@@ -78,7 +75,7 @@ class ThreadConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        res = await self.saveResponse(self.room_name, data["message"])
+        res = await self.saveResponse(self.room_name, data["message"], self.scope["user"])
 
         await self.channel_layer.group_send(
             self.room_group_name,
