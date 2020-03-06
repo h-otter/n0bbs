@@ -75,6 +75,9 @@ class ThreadConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
+        if data["message"]["comment"].strip() == "":
+            return
+
         res = await self.saveResponse(self.room_name, data["message"], self.scope["user"])
 
         await self.channel_layer.group_send(
