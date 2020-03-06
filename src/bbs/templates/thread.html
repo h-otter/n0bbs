@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}n0bbs / {{ thread.title }}{% endblock title %}
+{% block subtitle %}{{ thread.title }}{% endblock subtitle %}
+
+{% block content %}
+
+<div style="padding-bottom: 5rem; padding-top: 10px;">
+  {% for r in responses %}
+  <div class="container" id="r{{ forloop.counter }}">
+    {% if thread.anonymous %}
+    <p>{{ forloop.counter }}. {{ r.display_name }} {{ r.responded_at }} id:{{ r.masked_user }}</p>
+    {% else %}
+    <p>{{ forloop.counter }}. {{ r.display_name }} {{ r.responded_at }} id:{{ r.responded_by }}</p>
+    {% endif %}
+
+    <p>{{ r.markdown_rendered | safe | linebreaksbr }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- TODO: archived_at < now の場合以下を表示しない -->
+{% if not archived %}
+<nav class="navbar fixed-bottom navbar-light bg-light">
+  <form method="post" class="container">
+    {% csrf_token %}
+    {{ form }}
+    <!-- <input type="submit" class="btn btn-dark" type="button" value="Submit"> -->
+  </form>
+</nav>
+
+<script type="text/javascript">
+$(function(){
+  $('textarea.comment')
+  .on('change keydown paste cut', function(e){
+    if (e.keyCode == 13 && !e.shiftKey) {
+      $(this).closest("form").submit();
+      // $(this).val("");
+      e.preventDefault();
+    }
+
+    // これはクソコード
+    if ($(this).outerHeight() > this.scrollHeight) {
+      $(this).height(1)
+    }
+    while ($(this).outerHeight() < this.scrollHeight) {
+      $(this).height($(this).height() + 1)
+    }
+  });
+});
+</script>
+{% endif %}
+
+{% endblock %}

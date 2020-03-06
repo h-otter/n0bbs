@@ -1,0 +1,53 @@
+version: '3'
+services:
+  # nginx:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./nginx/Dockerfile
+  #   command: 'sh /etc/nginx/start-nginx.sh'
+  #   environment:
+  #     TZ: 'Asia/Tokyo'
+  #   ports:
+  #     - 8000:8000
+  #   volumes:
+  #     - ./nginx/logs/nginx/:/var/log/nginx/
+  #     - ./nginx/uwsgi_params:/etc/nginx/uwsgi_params
+  #     - ./django/static:/var/www/static/
+  #   depends_on:
+  #     - django
+
+  redis:
+    image: redis:5
+
+  mysql:
+    image: mysql:5.7
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=n0bbs
+    volumes:
+      - ./var/mysql:/var/lib/mysql
+
+  app:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/srv
+    links:
+      - mysql
+      - redis
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./etc/nginx/conf.d/:/etc/nginx/conf.d
+      # - ./html:/usr/share/nginx/html
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - app
