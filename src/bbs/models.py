@@ -4,6 +4,7 @@ import hashlib
 from markdown import markdown
 from django.db import models
 from django.utils import timezone
+from django.utils.timezone import localtime
 from django.utils import html
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -48,7 +49,7 @@ class Response(models.Model):
     def get_dict(self):
         return {
             "responded_by": self.masked_user() if self.thread.anonymous else str(self.responded_by),
-            "responded_at": str(self.responded_at),
+            "responded_at": str(localtime(self.responded_at)),
             "display_name": self.display_name,
             "comment": self.rendered_comment(),
         }
