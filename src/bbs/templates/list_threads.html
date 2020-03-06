@@ -8,7 +8,9 @@
     <tr>
     <th scope="col">スレタイ</th>
     <th scope="col">最終レス</th>
-    <th scope="col">アーカイブ</th>
+    <th scope="col">レス数</th>
+    <!-- <th scope="col">既読数</th> -->
+    <!-- <th scope="col">アーカイブ</th> -->
     <th scope="col">未読</th>
     </tr>
 </thead>
@@ -17,7 +19,9 @@
     <tr>
         <th scope="row" class="w-50"><a href="{% url 'thread_details' t.id %}">{{ t.title }}</a></th>
         <td>{{ t.responses.last.responded_at }}</td>
-        <td>{{ t.archived_at }}</td>
+        <td>{{ t.responses.count }}</td>
+        <!-- <td>{{ t.read_log.first.response_count }}</td> -->
+        <!-- <td>{{ t.archived_at }}</td> -->
         {% if not t.read_log.first or t.responses.count > t.read_log.first.response_count  %}
         <td><i class="fa fa-exclamation" aria-hidden="true"></i></td>
         {% else %}
