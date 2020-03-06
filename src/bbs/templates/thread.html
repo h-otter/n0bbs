@@ -17,7 +17,12 @@
 </nav>
 
 <script type="text/javascript">
-const url = 'ws://'+window.location.host+'/ws/thread/{{ thread.id }}';
+var url = "";
+if (window.location.protocol === "https:") {
+  url = 'wss://'+window.location.host+'/ws/thread/{{ thread.id }}';
+} else {
+  url = 'ws://'+window.location.host+'/ws/thread/{{ thread.id }}';
+}
 var ws = new WebSocket(url);
 var responses = [];
 
