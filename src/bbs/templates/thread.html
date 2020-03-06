@@ -59,7 +59,7 @@ ws.onmessage = function(e) {
 
 $(function() {
   $('#id_comment').focus();
-  $('#id_comment').on('keyup paste cut', function(e) {
+  $('#id_comment').on('keydown paste cut', function(e) {
     if (e.keyCode === 13 && !e.shiftKey) {
       ws.send(JSON.stringify({
         'type': 'new_response',
