@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.views.generic import ListView, CreateView, FormView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.db.models import Max
 
 from bbs.models import Thread, Response
 from bbs.forms import ResponseForm, ThreadForm
@@ -11,7 +12,7 @@ from bbs.slack import notify
 class ListThreads(ListView):
     model = Thread
     # TODO: order_byで最終レスでソートしたい
-    queryset = Thread.objects.filter(archived_at__gte=timezone.now())
+    queryset = Thread.objects.filter(archived_at__gte=timezone.now()).annotate(last=Max('responses__responded_at')).order_by("-last")
 
     template_name = "list_threads.html"
 
