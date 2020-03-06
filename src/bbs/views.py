@@ -16,20 +16,7 @@ class ListThreads(ListView):
     template_name = "list_threads.html"
 
     # TODO: pagination 未対応
-    # paginate_by = 20
-
-    # TODO: 未読未対応
-    # def get_context_data(self, **kwargs):
-    #     ctx = super().get_context_data(**kwargs)
-
-
-    #     thread = get_object_or_404(Thread, id=self.kwargs.get('thread_id'))
-    #     ctx["thread"] = thread
-    #     ctx["responses"] = Response.objects.all().filter(thread=thread)
-    #     ctx["archived"] = thread.archived_at < timezone.now()
-
-    #     return ctx
-
+    paginate_by = 100
 
 class CreateThread(CreateView):
     model = Thread

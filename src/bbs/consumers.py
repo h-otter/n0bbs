@@ -46,7 +46,7 @@ class ThreadConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def markRead(self, thread_id, user):
         log, _ = ReadLog.objects.get_or_create(thread_id=thread_id, user=user)
-        log.response = log.thread.responses.last()
+        log.response_count = log.thread.responses.count()
         log.save()
 
     async def disconnect(self, close_code):

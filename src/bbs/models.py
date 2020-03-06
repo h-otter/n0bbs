@@ -58,4 +58,4 @@ class Response(models.Model):
 class ReadLog(models.Model):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="read_log")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    response = models.ForeignKey(Response, on_delete=models.CASCADE, null=True)
+    response_count = models.IntegerField(default=0)
