@@ -42,6 +42,7 @@ class ThreadConsumer(AsyncWebsocketConsumer):
                 "responses": responses,
             },
         }))
+        await self.markRead(self.room_name, self.scope["user"])
 
     @database_sync_to_async
     def markRead(self, thread_id, user):
@@ -50,8 +51,6 @@ class ThreadConsumer(AsyncWebsocketConsumer):
         log.save()
 
     async def disconnect(self, close_code):
-        await self.markRead(self.room_name, self.scope["user"])
-
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -72,6 +71,7 @@ class ThreadConsumer(AsyncWebsocketConsumer):
             'type': 'new_response',
             'message': event["message"]
         }))
+        await self.markRead(self.room_name, self.scope["user"])
 
     async def receive(self, text_data):
         data = json.loads(text_data)
