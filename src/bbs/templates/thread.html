@@ -5,39 +5,68 @@
 
 {% block content %}
 
-<div style="padding-bottom: 5rem; padding-top: 10px;">
-  {% for r in responses %}
-  <div class="container" id="r{{ forloop.counter }}">
-    {% if thread.anonymous %}
-    <p>{{ forloop.counter }}. {{ r.display_name }} {{ r.responded_at }} id:{{ r.masked_user }}</p>
-    {% else %}
-    <p>{{ forloop.counter }}. {{ r.display_name }} {{ r.responded_at }} id:{{ r.responded_by }}</p>
-    {% endif %}
-
-    <p>{{ r.markdown_rendered | safe | linebreaksbr }}</p>
-  </div>
-  {% endfor %}
+<div id="responses" class="container" style="padding-bottom: 5rem; padding-top: 10px;">
 </div>
 
 <!-- TODO: archived_at < now の場合以下を表示しない -->
 {% if not archived %}
 <nav class="navbar fixed-bottom navbar-light bg-light">
-  <form method="post" class="container">
-    {% csrf_token %}
+  <div class="container">
     {{ form }}
-    <!-- <input type="submit" class="btn btn-dark" type="button" value="Submit"> -->
-  </form>
+  </div>
 </nav>
 
 <script type="text/javascript">
-$(function(){
-  $('textarea.comment')
-  .on('change keydown paste cut', function(e){
-    if (e.keyCode == 13 && !e.shiftKey) {
-      $(this).closest("form").submit();
-      // $(this).val("");
+const url = 'ws://'+window.location.host+'/ws/thread/{{ thread.id }}';
+var ws = new WebSocket(url);
+var responses = [];
+
+ws.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+};
+ws.onmessage = function(e) {
+  var data = JSON.parse(e.data)
+  console.log(data)
+
+  switch (data.type) {
+  case "all_responses":
+    responses = data.message.responses;
+    responses.forEach(function(r, i) {
+      index = i + 1
+
+      $("#responses").append('<div id="r'+index+'"></div>')
+      $("#r"+index).append("<p>"+index+". "+r.display_name+" "+r.responded_at+" id:"+r.responded_by+"</p>")
+      $("#r"+index).append(r.comment)
+    })
+    break;
+
+  case "new_response":
+    r = data.message
+    responses.push(data.message)
+    index = responses.length
+
+    $("#responses").append('<div id="r'+index+'"></div>')
+    $("#r"+index).append("<p>"+index+". "+r.display_name+" "+r.responded_at+" id:"+r.responded_by+"</p>")
+    $("#r"+index).append(r.comment)
+    break;
+  }
+}
+
+$(function() {
+  $('#id_comment').on('keyup paste cut', function(e) {
+    if (e.keyCode === 13 && !e.shiftKey) {
+      ws.send(JSON.stringify({
+        'type': 'new_response',
+        'message': {
+          'display_name': $('#id_display_name').val(),
+          'comment': $(this).val(),
+        },
+      }));
+
+      $(this).val("");
       e.preventDefault();
     }
+
 
     // これはクソコード
     if ($(this).outerHeight() > this.scrollHeight) {

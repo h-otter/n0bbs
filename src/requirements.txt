@@ -3,4 +3,5 @@ social-auth-app-django
 django-bootstrap4
 mysqlclient
 channels
+channels_redis
 markdown
