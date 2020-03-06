@@ -14,8 +14,11 @@ class ListThreads(ListView):
     queryset = Thread.objects.filter(archived_at__gte=timezone.now())
 
     template_name = "list_threads.html"
+
+    # TODO: pagination 未対応
     # paginate_by = 20
 
+    # TODO: 未読未対応
     # def get_context_data(self, **kwargs):
     #     ctx = super().get_context_data(**kwargs)
 
