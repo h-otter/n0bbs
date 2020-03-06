@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>n0bbs</title>
+  <meta charset="UTF-8">
+  <title>n0bbs</title>
+  
+  {% load static %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript jquery='full' %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
 </head>
 <body>
-  <h1>n0bbs</h1>
-  <button type="button" onclick="location.href='{% url 'social:begin' 'github' %}'">Login with GitHub</button>
+  <div class="d-flex align-items-center">
+    <h1>n0bbs</h1>
+    <a class="btn btn-dark" href="{% url 'social:begin' 'github' %}" role="button"><i class="fa fa-github" aria-hidden="true"></i></a>
+  </div>
 </body>
 </html>

@@ -7,6 +7,7 @@
 <thead>
     <tr>
     <th scope="col">スレタイ</th>
+    <th scope="col">未読</th>
     <th scope="col">最終レス</th>
     <th scope="col">アーカイブ</th>
     </tr>
@@ -16,6 +17,7 @@
     <tr>
     <th scope="row" class="w-50"><a href="{% url 'thread_details' t.id %}">{{ t.title }}</a></th>
     <td>{{ t.responses.last_responded_at }}</td>
+    <td>{{ t.responses }}</td>
     <td>{{ t.archived_at }}</td>
     </tr>
     {% endfor %}
