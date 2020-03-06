@@ -1,21 +1,5 @@
 version: '3'
 services:
-  # nginx:
-  #   build:
-  #     context: ./
-  #     dockerfile: ./nginx/Dockerfile
-  #   command: 'sh /etc/nginx/start-nginx.sh'
-  #   environment:
-  #     TZ: 'Asia/Tokyo'
-  #   ports:
-  #     - 8000:8000
-  #   volumes:
-  #     - ./nginx/logs/nginx/:/var/log/nginx/
-  #     - ./nginx/uwsgi_params:/etc/nginx/uwsgi_params
-  #     - ./django/static:/var/www/static/
-  #   depends_on:
-  #     - django
-
   redis:
     image: redis:5
 
@@ -33,6 +17,13 @@ services:
       context: ./src
       dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      SECRET_KEY: "hogehoge"
+      DEBUG: "true"
+      ALLOWED_HOST: localhost
+      SLACK_INCOMING_HOOK_URL:
+      SOCIAL_AUTH_GITHUB_KEY:
+      SOCIAL_AUTH_GITHUB_SECRET:
     ports:
       - "8000:8000"
     volumes:
@@ -45,7 +36,7 @@ services:
     image: nginx
     volumes:
       - ./etc/nginx/conf.d/:/etc/nginx/conf.d
-      # - ./html:/usr/share/nginx/html
+      - ./src/static:/usr/share/nginx/html/static
     ports:
       - "80:80"
       - "443:443"
