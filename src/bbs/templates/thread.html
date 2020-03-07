@@ -59,6 +59,8 @@ ws.onmessage = function(e) {
 
 $(function() {
   $('#id_comment').focus();
+  let lineHeight = parseInt($('#id_comment').css('lineHeight'));
+  $('#id_comment').height(lineHeight);
 
   $('#id_comment').on('input', function(e) {
     let lines = ($(this).val() + '\n').match(/\n/g).length;
