@@ -2,9 +2,17 @@
 build:
 	docker-compose build
 
-.PHONY: runserver
+.PHONY: up
 runserver:
 	docker-compose up -d
+
+.PHONY: down
+runserver:
+	docker-compose down
+
+.PHONY: log
+runserver:
+	docker-compose log -f
 
 .PHONY: migrate
 migrate:
