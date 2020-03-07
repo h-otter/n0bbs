@@ -59,7 +59,14 @@ ws.onmessage = function(e) {
 
 $(function() {
   $('#id_comment').focus();
-  $('#id_comment').on('keydown paste cut', function(e) {
+
+  $('#id_comment').on('input', function(e) {
+    let lines = ($(this).val() + '\n').match(/\n/g).length;
+    let lineHeight = parseInt($('#id_comment').css('lineHeight'));
+    $(this).height(lineHeight * lines);
+  });
+
+  $('#id_comment').on('keydown', function(e) {
     if (e.keyCode === 13 && !e.shiftKey) {
       ws.send(JSON.stringify({
         'type': 'new_response',
@@ -72,18 +79,12 @@ $(function() {
       $(this).val("");
       e.preventDefault();
 
+      let lineHeight = parseInt($(this).css('lineHeight'));
+      $(this).height(lineHeight);
+
       $('html, body').animate({
         scrollTop: $(document).height()
       },1500);
-    }
-
-
-    // これはクソコード
-    if ($(this).outerHeight() > this.scrollHeight) {
-      $(this).height(1)
-    }
-    while ($(this).outerHeight() < this.scrollHeight) {
-      $(this).height($(this).height() + 1)
     }
   });
 });
