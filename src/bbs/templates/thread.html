@@ -54,10 +54,16 @@ ws.onmessage = function(e) {
     $("#r"+index).append("<p>"+index+". "+r.display_name+" "+r.responded_at+" id:"+r.responded_by+"</p>")
     $("#r"+index).append(r.comment)
 
-    Push.create("{{ thread.title }}: "+r.comment)
+    // TODO: 自分が送ったものの通知はいらない
+    Push.create("{{ thread.title }}: "+r.comment);
     break;
   }
 }
+
+// 昨今の通知の有効化を共用させるページが増えている兆候に応じて、
+// ブラウザが表示時に許可を求めてくると許諾を非表示にしてしまうことがわかった
+// よって、表示時にはとりあえず許諾を求めないことにする
+// Push.Permission.request();
 
 $(function() {
   $('#id_comment').focus();
