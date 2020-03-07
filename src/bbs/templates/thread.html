@@ -53,6 +53,8 @@ ws.onmessage = function(e) {
     $("#responses").append('<div id="r'+index+'"></div>')
     $("#r"+index).append("<p>"+index+". "+r.display_name+" "+r.responded_at+" id:"+r.responded_by+"</p>")
     $("#r"+index).append(r.comment)
+
+    Push.create("{{ thread.title }}: "+r.comment)
     break;
   }
 }
