@@ -7,7 +7,6 @@ import "./ThreadDetails.css";
 import Response from './Response';
 import ResponseInstance from './ResponseInstance';
 import { DefaultApi, InlineResponse200Results } from './axios-client/api';
-import { InlineResponse200 } from './axios-client/model';
 
 
 
