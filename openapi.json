@@ -53,6 +53,10 @@
                       "items": {
                         "type": "object",
                         "properties": {
+                          "id": {
+                            "type": "integer",
+                            "readOnly": true
+                          },
                           "title": {
                             "type": "string",
                             "maxLength": 255
@@ -64,6 +68,19 @@
                             "type": "string",
                             "format": "date-time",
                             "nullable": true
+                          },
+                          "responses_count": {
+                            "type": "integer",
+                            "readOnly": true
+                          },
+                          "read_responses_count": {
+                            "type": "integer",
+                            "readOnly": true
+                          },
+                          "last_responded_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "readOnly": true
                           }
                         },
                         "required": [
@@ -160,6 +177,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
                     "title": {
                       "type": "string",
                       "maxLength": 255
@@ -171,6 +192,19 @@
                       "type": "string",
                       "format": "date-time",
                       "nullable": true
+                    },
+                    "responses_count": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "read_responses_count": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "last_responded_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "readOnly": true
                     }
                   },
                   "required": [
@@ -206,6 +240,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
                     "title": {
                       "type": "string",
                       "maxLength": 255
@@ -217,6 +255,19 @@
                       "type": "string",
                       "format": "date-time",
                       "nullable": true
+                    },
+                    "responses_count": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "read_responses_count": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "last_responded_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "readOnly": true
                     }
                   },
                   "required": [

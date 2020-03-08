@@ -83,6 +83,12 @@ export interface InlineResponse200 {
 export interface InlineResponse200Results {
     /**
      * 
+     * @type {number}
+     * @memberof InlineResponse200Results
+     */
+    id?: number;
+    /**
+     * 
      * @type {string}
      * @memberof InlineResponse200Results
      */
@@ -99,6 +105,24 @@ export interface InlineResponse200Results {
      * @memberof InlineResponse200Results
      */
     archived_at?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse200Results
+     */
+    responses_count?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse200Results
+     */
+    read_responses_count?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200Results
+     */
+    last_responded_at?: string;
 }
 
 /**

@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.views.generic import ListView, CreateView, FormView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.db.models import Max
+from django.db.models import Max, Count
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from rest_framework import permissions
@@ -20,7 +20,7 @@ class ThreadViewSet(mixins.CreateModelMixin,
                     # mixins.DestroyModelMixin,
                     mixins.ListModelMixin,
                     GenericViewSet):
-    queryset = Thread.objects.filter(archived_at__gte=timezone.now()).annotate(last=Max('responses__responded_at')).order_by("-last")
+    queryset = Thread.objects.filter(archived_at__gte=timezone.now()).annotate(responses_count=Count('responses')).annotate(last_responded_at=Max('responses__responded_at')).annotate(read_responses_count=Max('read_log__response_count')).order_by("-last_responded_at")
     serializer_class = ThreadSerializer
     permission_classes = [permissions.IsAuthenticated]
 
