@@ -8,7 +8,7 @@ import ThreadDetails from './ThreadDetails';
 
 ReactDOM.render(
   <Router>
-    <Route path="/thread/:id" component={ThreadDetails}></Route>
+    <Route path="/threads/:id" component={ThreadDetails}></Route>
   </Router>,
 document.getElementById('root'));
 

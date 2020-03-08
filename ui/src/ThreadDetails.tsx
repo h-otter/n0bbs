@@ -1,11 +1,13 @@
 import React from 'react';
-import { AppBar, Container, TextField } from '@material-ui/core';
+import { AppBar, Container, TextField, Chip } from '@material-ui/core';
 import { RouteComponentProps } from "react-router-dom";
 import Push from "push.js"
 
 import "./ThreadDetails.css";
 import Response from './Response';
 import ResponseInstance from './ResponseInstance';
+import { DefaultApi, InlineResponse200Results } from './axios-client/api';
+import { InlineResponse200 } from './axios-client/model';
 
 
 
@@ -17,6 +19,8 @@ interface ThreadDetailsStateInterface {
 
   displayName: string;
   comment: string;
+
+  thread: InlineResponse200Results;
 }
 
 class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadDetailsStateInterface> {
@@ -31,13 +35,16 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     }
     url += window.location.host+'/api/ws/thread/'+this.props.match.params.id;
 
-
     this.state = {
       responses: [],
       websocket: new WebSocket(url),
 
       displayName: "n0nameさん",
       comment: "",
+
+      thread: {
+        title: "",
+      },
     };
 
     this.state.websocket.onclose = (e) => {
@@ -82,6 +89,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
         break;
       }
     }
+
+    let baseurl = window.location.protocol+"//"+window.location.host
+    new DefaultApi({ basePath: baseurl }).retrieveThread(this.props.match.params.id).then((res) => {
+      this.setState({thread: res.data});
+    })
   }
 
   sendResponse = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -109,7 +121,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       list.push(<Response unread={ true } i={ i } responses={ this.state.responses } />)
     })
 
-    return <Container id="responses" maxWidth="xl">{ list }</Container>
+    return <>{ list }</>
   }
 
   componentWillUnmount = () => {
@@ -119,7 +131,14 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
   render() {
     return (
       <div className="thread-details">
-        { this.renderResponses() }
+        <Container id="responses" maxWidth="xl">
+          <div>
+            <h1>{ this.state.thread.title }</h1>
+            <Chip label={ "Archive at "+this.state.thread.archived_at } variant="outlined" size="small" />
+            <Chip label="Anonymous" variant="outlined" size="small" />
+          </div>
+          { this.renderResponses() }
+        </Container>
         {/* TODO: stickyはレス数が少ないときに表示が崩れる */}
         <AppBar position="sticky" color="inherit" id="response-form">
           <Container maxWidth="md">
