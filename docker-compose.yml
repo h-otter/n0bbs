@@ -21,9 +21,8 @@ services:
 
   app:
     build:
-      context: ./src
+      context: ./app
       dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
     environment:
       SECRET_KEY: "hogehoge"
       DEBUG: "true"
@@ -34,7 +33,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./src:/srv
+      - ./:/srv
     links:
       - mysql
       - redis
@@ -43,7 +42,7 @@ services:
     image: nginx
     volumes:
       - ./etc/nginx/conf.d/:/etc/nginx/conf.d
-      - ./src/static:/usr/share/nginx/html/api/static
+      - ./app/static:/usr/share/nginx/html/api/static
     ports:
       - "8000:80"
     links:

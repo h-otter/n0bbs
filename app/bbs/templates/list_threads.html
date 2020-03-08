@@ -17,7 +17,7 @@
 <tbody>
     {% for t in object_list %}
     <tr>
-        <th scope="row" class="w-50"><a href="{% url 'thread_details' t.id %}">{{ t.title }}</a></th>
+        <th scope="row" class="w-50"><a href="{% url 'thread_details' t.id %}#r{{ t.read_log.first.response_count }}">{{ t.title }}</a></th>
         <td>{{ t.responses.last.responded_at }}</td>
         <td>{{ t.responses.count }}</td>
         <!-- <td>{{ t.read_log.first.response_count }}</td> -->
