@@ -25,7 +25,7 @@ from bbs.views import ListThreads, ThreadDetails, CreateThread
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/admin/', admin.site.urls),
 
     path('auth/', include('social_django.urls', namespace='social')),
     path('logout/', LogoutView.as_view(), name='logout'),

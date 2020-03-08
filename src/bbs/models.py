@@ -10,7 +10,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.template.defaultfilters import linebreaksbr, safe, urlize
 
-
 def default_archived_at():
   return timezone.now() + settings.DEFAULT_THREAD_ARCHIVE_DURATION
 
@@ -39,22 +38,22 @@ class Response(models.Model):
         k = "{}-{}-{}".format(settings.SECRET_KEY, self.responded_at.date(), str(self.responded_by))
         return hashlib.sha256(k.encode()).hexdigest()[:16]
 
-    def rendered_comment(self):
-        c = html.escape(self.comment)
-        c = markdown(c)
-        c = re.sub(r'&gt;&gt;(\d+)', r'<a href="#r\1">&gt;&gt;\1<a>', c)
-        c = safe(c)
-        c = linebreaksbr(c)
-        c = urlize(c)
+    # def rendered_comment(self):
+    #     c = html.escape(self.comment)
+    #     c = markdown(c)
+    #     c = re.sub(r'&gt;&gt;(\d+)', r'<a href="#r\1">&gt;&gt;\1<a>', c)
+    #     c = safe(c)
+    #     c = linebreaksbr(c)
+    #     c = urlize(c)
 
-        return c
+    #     return c
 
     def get_dict(self):
         return {
             "responded_by": self.masked_user() if self.thread.anonymous else str(self.responded_by),
             "responded_at": str(localtime(self.responded_at)),
             "display_name": self.display_name,
-            "comment": self.rendered_comment(),
+            "comment": html.escape(self.comment),
         }
 
 

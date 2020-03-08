@@ -12,6 +12,13 @@ services:
     volumes:
       - ./var/mysql:/var/lib/mysql
 
+  ui:
+    image: node:13
+    command: yarn start
+    working_dir: /srv
+    volumes:
+      - ./ui:/srv
+
   app:
     build:
       context: ./src
@@ -36,9 +43,9 @@ services:
     image: nginx
     volumes:
       - ./etc/nginx/conf.d/:/etc/nginx/conf.d
-      - ./src/static:/usr/share/nginx/html/static
+      - ./src/static:/usr/share/nginx/html/api/static
     ports:
-      - "80:80"
-      - "443:443"
+      - "8000:80"
     links:
       - app
+      - ui

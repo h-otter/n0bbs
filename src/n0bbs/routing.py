@@ -8,6 +8,6 @@ from bbs.consumers import ThreadConsumer
 
 application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(URLRouter([
-        path('ws/thread/<int:thread_id>', ThreadConsumer),
+        path('api/ws/thread/<int:thread_id>', ThreadConsumer),
     ])),
 })
