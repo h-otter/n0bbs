@@ -3,12 +3,26 @@ from django.views.generic import ListView, CreateView, FormView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.db.models import Max
+from rest_framework.viewsets import GenericViewSet
+from rest_framework import mixins
 
 from bbs.models import Thread, Response
 from bbs.forms import ResponseForm, ThreadForm
+from bbs.serializer import ThreadSerializer
 from bbs.slack import notify
- 
- 
+
+
+
+class ThreadViewSet(mixins.CreateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    # mixins.UpdateModelMixin,
+                    # mixins.DestroyModelMixin,
+                    mixins.ListModelMixin,
+                    GenericViewSet):
+    queryset = Thread.objects.filter(archived_at__gte=timezone.now()).annotate(last=Max('responses__responded_at')).order_by("-last")
+    serializer_class = ThreadSerializer
+
+
 class ListThreads(ListView):
     model = Thread
     # TODO: order_byで最終レスでソートしたい
@@ -18,6 +32,7 @@ class ListThreads(ListView):
 
     # TODO: pagination 未対応
     paginate_by = 100
+
 
 class CreateThread(CreateView):
     model = Thread

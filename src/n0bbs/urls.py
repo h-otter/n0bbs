@@ -19,16 +19,27 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import login_required
 # from django.contrib.admin.views.decorators import staff_member_required
+from rest_framework import routers
 
 from n0bbs.views import index
-from bbs.views import ListThreads, ThreadDetails, CreateThread
+from bbs.views import ListThreads, ThreadDetails, CreateThread, ThreadViewSet
+
+
+
+
+router = routers.DefaultRouter()
+router.register(r'threads', ThreadViewSet)
 
 
 urlpatterns = [
     path('api/admin/', admin.site.urls),
 
     path('auth/', include('social_django.urls', namespace='social')),
+    # あとで auth/logout/ にする
     path('logout/', LogoutView.as_view(), name='logout'),
+
+    path('api/', include(router.urls)),
+
 
     # Githubの特定ユーザーにのみ権限を与えるなどは面倒なのでstaffかどうかで判断する
     # ユーザー登録にはgithub ログインしてもらったあとに、staffユーザーが変更する必要がある

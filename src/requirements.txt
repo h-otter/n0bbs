@@ -1,7 +1,8 @@
-django
-social-auth-app-django
-django-bootstrap4
-mysqlclient
 channels
 channels_redis
+django
+django-bootstrap4
+djangorestframework
+mysqlclient
 markdown
+social-auth-app-django
