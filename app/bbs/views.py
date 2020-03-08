@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.db.models import Max
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
+from rest_framework import permissions
 
 from bbs.models import Thread, Response
 from bbs.forms import ResponseForm, ThreadForm
@@ -21,7 +22,7 @@ class ThreadViewSet(mixins.CreateModelMixin,
                     GenericViewSet):
     queryset = Thread.objects.filter(archived_at__gte=timezone.now()).annotate(last=Max('responses__responded_at')).order_by("-last")
     serializer_class = ThreadSerializer
-
+    permission_classes = [permissions.IsAuthenticated]
 
 class ListThreads(ListView):
     model = Thread
