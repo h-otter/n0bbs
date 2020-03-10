@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper } from '@material-ui/core';
-// import {  } from 'emoji-toolkit';
+import * as emojione from 'emojione';
 
 import './Response.css';
 import ResponseInstance from './ResponseInstance';
@@ -33,7 +33,7 @@ class Response extends React.Component<ResponsePropsInterface, ResponsepropsInte
     comment = comment.replace(/(http[s]?:\/\/.*)[\s\r\n]*/g, '<a href="$1">$1</a>');
     // anchor to >>1
     comment = comment.replace(/&gt;&gt;(\d+)/g, '<a href="#r$1">&gt;&gt;$1</a>');
-    // comment = joypixels.toImage(comment);
+    comment = emojione.toImage(comment);
 
     return <p dangerouslySetInnerHTML={{
       __html: comment
