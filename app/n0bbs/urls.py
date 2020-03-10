@@ -35,16 +35,12 @@ urlpatterns = [
     path('api/admin/', admin.site.urls),
 
     path('auth/', include('social_django.urls', namespace='social')),
-    # あとで auth/logout/ にする
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('auth/logout/', LogoutView.as_view(), name='logout'),
 
     path('api/', include(router.urls)),
 
 
-    # Githubの特定ユーザーにのみ権限を与えるなどは面倒なのでstaffかどうかで判断する
-    # ユーザー登録にはgithub ログインしてもらったあとに、staffユーザーが変更する必要がある
-    # TODO: うまく行かないかも
-    path('threads:new', login_required(CreateThread.as_view()), name="create_thread"),
+    path('api/threads:new', login_required(CreateThread.as_view()), name="create_thread"),
 
     path('', index, name='index'),
 ]
