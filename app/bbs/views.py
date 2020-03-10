@@ -35,7 +35,7 @@ class CreateThread(CreateView):
         # link = reverse('thread_details', kwargs={'thread_id': self.pk})
         # return link
         # TODO: なんかうまく動かないから保留
-        return reverse("list_threads")
+        return "/threads"
 
     def form_valid(self, form):
         # TODO: スレを立てるときにレスにユーザー名が入らない :cry:
