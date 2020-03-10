@@ -10,6 +10,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.template.defaultfilters import linebreaksbr, safe, urlize
 
+
+# TODO: あとで消す
 def default_archived_at():
   return timezone.now() + settings.DEFAULT_THREAD_ARCHIVE_DURATION
 
@@ -18,7 +20,6 @@ class Thread(models.Model):
     # 有効なスレッドの中ではユニークのほうが良さそう
     title = models.CharField("スレタイ", max_length=255, unique=True, null=False)
     anonymous = models.BooleanField("匿名スレ", default=False)
-    archived_at = models.DateTimeField(default=default_archived_at, null=True, blank=True) # これでdefaultがうまくいくのかわからない
 
 
     def __str__(self):

@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import routers
 
 from n0bbs.views import index
-from bbs.views import ListThreads, ThreadDetails, CreateThread, ThreadViewSet
+from bbs.views import CreateThread, ThreadViewSet
 
 
 
@@ -44,9 +44,7 @@ urlpatterns = [
     # Githubの特定ユーザーにのみ権限を与えるなどは面倒なのでstaffかどうかで判断する
     # ユーザー登録にはgithub ログインしてもらったあとに、staffユーザーが変更する必要がある
     # TODO: うまく行かないかも
-    path('threads', login_required(ListThreads.as_view()), name="list_threads"),
     path('threads:new', login_required(CreateThread.as_view()), name="create_thread"),
-    path('threads/<int:thread_id>', login_required(ThreadDetails.as_view()), name="thread_details"),
 
     path('', index, name='index'),
 ]

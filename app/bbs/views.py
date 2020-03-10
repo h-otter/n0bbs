@@ -20,19 +20,9 @@ class ThreadViewSet(mixins.CreateModelMixin,
                     # mixins.DestroyModelMixin,
                     mixins.ListModelMixin,
                     GenericViewSet):
-    queryset = Thread.objects.filter(archived_at__gte=timezone.now()).annotate(responses_count=Count('responses')).annotate(last_responded_at=Max('responses__responded_at')).annotate(read_responses_count=Max('read_log__response_count')).order_by("-last_responded_at")
+    queryset = Thread.objects.annotate(responses_count=Count('responses')).annotate(last_responded_at=Max('responses__responded_at')).annotate(read_responses_count=Max('read_log__response_count')).order_by("-last_responded_at")
     serializer_class = ThreadSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-class ListThreads(ListView):
-    model = Thread
-    # TODO: order_byで最終レスでソートしたい
-    queryset = Thread.objects.filter(archived_at__gte=timezone.now()).annotate(last=Max('responses__responded_at')).order_by("-last")
-
-    template_name = "list_threads.html"
-
-    # TODO: pagination 未対応
-    paginate_by = 100
 
 
 class CreateThread(CreateView):
@@ -57,20 +47,3 @@ class CreateThread(CreateView):
         notify('「{}」'.format(form.instance.title))
 
         return super().form_valid(form)
-
-
-class ThreadDetails(FormView):
-    form_class = ResponseForm
-
-    template_name = "thread.html"
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        thread = get_object_or_404(Thread, id=self.kwargs.get('thread_id'))
-        ctx["thread"] = thread
-        ctx["responses"] = Response.objects.all().filter(thread=thread)
-        ctx["archived"] = thread.archived_at < timezone.now()
-
-        return ctx
-
