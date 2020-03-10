@@ -16,7 +16,7 @@ def default_archived_at():
 
 class Thread(models.Model):
     # 有効なスレッドの中ではユニークのほうが良さそう
-    title = models.CharField("スレタイ", max_length=255, unique=False, null=False)
+    title = models.CharField("スレタイ", max_length=255, unique=True, null=False)
     anonymous = models.BooleanField("匿名スレ", default=False)
     archived_at = models.DateTimeField(default=default_archived_at, null=True, blank=True) # これでdefaultがうまくいくのかわからない
 
