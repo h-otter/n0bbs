@@ -45,7 +45,7 @@ class Response extends React.Component<ResponsePropsInterface, ResponsepropsInte
     return (
       <div className="response">
         <Paper id={ this.props.isChild !== undefined && this.props.isChild ? "" : "r"+(this.props.i+1) } variant="outlined" square>
-          <p>
+          <p style={{fontSize: '0.75em'}}>
             <a href={ "#r"+(this.props.i + 1) }>{ this.props.i + 1 }.</a> { this.props.responses[this.props.i].display_name } { this.props.responses[this.props.i].responded_at } id:{ this.props.responses[this.props.i].responded_by }
           </p>
           { this.renderComment() }
