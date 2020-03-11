@@ -1,12 +1,3 @@
-FROM node:13 AS UI
-
-WORKDIR /srv/ui
-COPY ui /srv/ui
-
-RUN yarn install \
- && yarn run build
-
-
 FROM python:3.8 AS APP
 
 WORKDIR /srv/app
@@ -17,6 +8,15 @@ COPY app /srv/app
 
 # TODO: asgiなどもう一回見直す
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+
+FROM node:13 AS UI
+
+WORKDIR /srv/ui
+COPY ui /srv/ui
+
+RUN yarn install \
+ && yarn run build
 
 
 FROM nginx
