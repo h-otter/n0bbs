@@ -14,7 +14,7 @@ services:
 
   app:
     build:
-      context: ./
+      context: ../
       dockerfile: Dockerfile
       target: APP
     environment:
@@ -30,7 +30,7 @@ services:
 
   nginx:
     build:
-      context: ./
+      context: ../
       dockerfile: Dockerfile
     ports:
       - "8000:80"
