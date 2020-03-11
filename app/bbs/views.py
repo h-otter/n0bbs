@@ -1,12 +1,11 @@
 from django.views.generic import CreateView
 from django.db.models import Max, Count, IntegerField, Case, When, Value
-from django.db.models import Prefetch
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
-from bbs.models import Thread, Response, ReadLog
+from bbs.models import Thread, Response
 from bbs.forms import ThreadForm
 from bbs.serializer import ThreadSerializer, ResponseSerializer
 
@@ -28,7 +27,11 @@ class ThreadViewSet(mixins.CreateModelMixin,
         return Thread.objects.annotate(
             responses_count=Count('responses', distinct=True),
         ).annotate(
-            read_responses_count=Max('read_log__response_count'),
+            read_responses_count=Max(Case(
+                When(read_log__user=user, then='read_log__response_count'),
+                default=Value(0),
+                output_field=IntegerField()
+            )),
             last_responded_at=Max('responses__responded_at'),
         ).order_by("-last_responded_at")
 
