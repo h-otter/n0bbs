@@ -6,12 +6,15 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import ListThreads from './ListThreads';
 import ThreadDetails from './ThreadDetails';
+import AuthRequired from './AuthRequired';
 
 
 ReactDOM.render(
   <Router>
-    <Route exact path="/threads/" component={ListThreads}></Route>
-    <Route path="/threads/:id" component={ThreadDetails}></Route>
+    <AuthRequired>
+      <Route exact path="/threads/" component={ListThreads}></Route>
+      <Route path="/threads/:id" component={ThreadDetails}></Route>
+    </AuthRequired>
   </Router>,
 document.getElementById('root'));
 
