@@ -1,16 +1,20 @@
 import React from 'react';
-import { RouteComponentProps } from "react-router-dom";
-import { 
+import { Link } from "react-router-dom";
+import {
   Slide,
   AppBar,
   Toolbar,
   IconButton,
   useScrollTrigger,
   Typography,
-  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
  } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import MenuIcon from '@material-ui/icons/Menu';
 
 
 // https://material-ui.com/components/app-bar/#hide-app-bar
@@ -38,22 +42,28 @@ interface BarThreadsPropsInterface {
   children: React.ReactElement;
 }
 
-interface BarThreadsStateInterface {}
+interface BarThreadsStateInterface {
+  drawer: boolean;
+}
 
 class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInterface> {
   constructor(props: BarThreadsPropsInterface) {
     super(props);
 
     this.state = {
+      drawer: false,
     };
   }
-  
+
   render() {
     return (
       <div className="bar">
         <HideOnScroll>
           <AppBar>
             <Toolbar variant="dense">
+              <IconButton edge="start" color="inherit" aria-label="menu" onClick={ () => {this.setState({drawer: true})} }>
+                <MenuIcon />
+              </IconButton>
               <Typography variant="h6">
                 n0bbs
               </Typography>
@@ -69,6 +79,17 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
         </HideOnScroll>
         <Toolbar variant="dense" />
         { this.props.children }
+
+        <Drawer 
+          open={ this.state.drawer } 
+          onClose={ () => {this.setState({drawer: false})} }
+        >
+          <List dense={ true } style={{width: 240}}>
+            <ListItem button component={Link} to={ "/threads/" }>
+              <ListItemText primary="All Threads" />
+            </ListItem>
+          </List>
+        </Drawer>
       </div>
     );
   }
