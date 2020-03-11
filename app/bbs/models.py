@@ -15,11 +15,6 @@ from django.template.defaultfilters import linebreaksbr, safe, urlize
 from bbs.slack import notify
 
 
-# TODO: あとで消す
-def default_archived_at():
-  return timezone.now() + settings.DEFAULT_THREAD_ARCHIVE_DURATION
-
-
 class Thread(models.Model):
     # 有効なスレッドの中ではユニークのほうが良さそう
     title = models.CharField("スレタイ", max_length=255, unique=True, null=False)

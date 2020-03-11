@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=255)),
-                ('archived_at', models.DateTimeField(blank=True, default=bbs.models.default_archived_at, null=True)),
+                ('archived_at', models.DateTimeField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
