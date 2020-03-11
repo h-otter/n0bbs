@@ -1,5 +1,5 @@
 from django.views.generic import CreateView
-from django.db.models import Max, Count
+from django.db.models import Max, Count, Q
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework.viewsets import GenericViewSet
@@ -24,7 +24,7 @@ class ThreadViewSet(mixins.CreateModelMixin,
     def get_queryset(self):
         user = self.request.user
 
-        return Thread.objects.filter(read_log__user=user).annotate(
+        return Thread.objects.filter(Q(read_log__user=user) | Q(read_log__user=None)).annotate(
             responses_count=Count('responses'),
             last_responded_at=Max('responses__responded_at'),
             read_responses_count=Max('read_log__response_count'),
