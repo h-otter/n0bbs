@@ -1,14 +1,14 @@
 import React from 'react';
-import { AppBar, Container, TextField, Chip } from '@material-ui/core';
+import { Fab, Container, Tooltip, Chip, AppBar, TextField } from '@material-ui/core';
 import { RouteComponentProps } from "react-router-dom";
 import Push from "push.js"
+import EditIcon from '@material-ui/icons/Edit';
 
 import "./ThreadDetails.css";
 import Response from './Response';
 import ResponseInstance from './ResponseInstance';
 import { DefaultApi, InlineResponse200Results } from './axios-client/api';
 import Bar from './Bar';
-
 
 
 interface ThreadDetailsPropsInterface extends RouteComponentProps<{ id: string }> {}
@@ -59,16 +59,46 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       let data = JSON.parse(e.data)
       console.log(data)
     
+
+      let responses: ResponseInstance[] = []
       switch (data.type) {
       case "all_responses":
+        responses = data.message.responses
+        responses.forEach((res, i) => {
+          let result = res.comment.match(/&gt;&gt;\d+/g)
+          result?.map((v) => {
+            return parseInt(v.replace("&gt;&gt;", "")) - 1
+          }).forEach((v) => {
+            console.log(""+v+i)
+            if (responses[v].referenced === undefined) {
+              responses[v].referenced = [i]
+            } else {
+              responses[v].referenced?.push(i)
+            }
+          })
+        })
+
         this.setState({
           responses: data.message.responses,
         })
         break;
     
       case "new_response":
-        let responses = this.state.responses
+        responses = this.state.responses
+        let i = responses.length
         responses.push(data.message)
+
+        let result = responses[i].comment.match(/&gt;&gt;\d+/g)
+        result?.map((v: string) => {
+          return parseInt(v.replace("&gt;&gt;", "")) - 1
+        }).forEach((v: number) => {
+          if (responses[v].referenced === undefined) {
+            responses[v].referenced = [i]
+          } else {
+            responses[v].referenced?.push(i)
+          }
+        })
+        
         this.setState({
           responses: responses,
         })
@@ -95,6 +125,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       this.setState({thread: res.data});
     })
   }
+
 
   sendResponse = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.keyCode === 13 && !e.shiftKey) {
@@ -141,6 +172,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
               </div>
               { this.renderResponses() }
             </Container>
+
+            {/* <Fab color="secondary">
+              <EditIcon />
+            </Fab> */}
+
             {/* TODO: stickyはレス数が少ないときに表示が崩れる */}
             <AppBar position="sticky" color="inherit" id="response-form">
               <Container maxWidth="md">
