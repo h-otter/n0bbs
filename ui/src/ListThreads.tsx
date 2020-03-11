@@ -1,10 +1,11 @@
 import React from 'react';
 import { RouteComponentProps, Link } from "react-router-dom";
 import { 
-  Paper, TableContainer, TableHead, Table, TableRow, TableCell, TableBody, Container,
+  Container,
   List,
   ListItem,
   ListItemText,
+  Chip,
  } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -42,7 +43,10 @@ class ListThreads extends React.Component<ListThreadsPropsInterface, ListThreads
             <List>
               { this.state.threads?.map((t: InlineResponse200Results) => (
                 <ListItem button component={Link} to={ "/threads/"+t.id }>
-                  <ListItemText primary={ t.title } secondary={ t.read_responses_count !== undefined && t.responses_count !== undefined ? "" + (t.responses_count - t.read_responses_count) + " / " + t.responses_count + " " + t.last_responded_at : "" } />
+                  <ListItemText primary={ t.title } secondary={ t.read_responses_count !== undefined && t.responses_count !== undefined ? "" + t.read_responses_count + " / " + t.responses_count + " " + t.last_responded_at : "" } />
+                  { t.read_responses_count !== undefined && t.responses_count !== undefined && t.responses_count - t.read_responses_count > 0 && 
+                    <Chip label={ ""+(t.responses_count - t.read_responses_count) } />
+                  }
                 </ListItem>
               ))}
             </List>
