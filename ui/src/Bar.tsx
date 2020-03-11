@@ -16,7 +16,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 // https://material-ui.com/components/app-bar/#hide-app-bar
 interface HideOnScrollProps {
   window?: () => Window;
-  children: React.ReactElement[];
+  children: React.ReactElement;
 }
 
 function HideOnScroll(props: HideOnScrollProps) {
@@ -51,7 +51,7 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
   render() {
     return (
       <div className="bar">
-        <HideOnScroll {...this.props}>
+        <HideOnScroll>
           <AppBar>
             <Toolbar variant="dense">
               <Typography variant="h6">

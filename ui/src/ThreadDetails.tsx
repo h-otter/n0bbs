@@ -132,41 +132,43 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     return (
       <div className="thread-details">
         <Bar>
-          <Container id="responses" maxWidth="xl">
-            <div>
-              <h1>{ this.state.thread.title }</h1>
-              <Chip label={ "Archive at "+this.state.thread.archived_at } variant="outlined" size="small" />
-              <Chip label="Anonymous" variant="outlined" size="small" />
-            </div>
-            { this.renderResponses() }
-          </Container>
-          {/* TODO: stickyはレス数が少ないときに表示が崩れる */}
-          <AppBar position="sticky" color="inherit" id="response-form">
-            <Container maxWidth="md">
-              <TextField
-                id="outlined-multiline-flexible"
-                label="Name"
-                fullWidth
-                variant="outlined"
-                margin="dense"
-                value={ this.state.displayName }
-                onChange={ (e) => this.setState({displayName: e.target.value}) }
-              />
-              <TextField
-                id="outlined-multiline-flexible"
-                label="Comment"
-                autoFocus
-                fullWidth
-                multiline
-                rowsMax="4"
-                variant="outlined"
-                margin="dense"
-                value={ this.state.comment }
-                onChange={ (e) => this.setState({comment: e.target.value}) }
-                onKeyDown={ this.sendResponse }
-              />
+          <div>
+            <Container id="responses" maxWidth="xl">
+              <div>
+                <h1>{ this.state.thread.title }</h1>
+                <Chip label={ "Archive at "+this.state.thread.archived_at } variant="outlined" size="small" />
+                <Chip label="Anonymous" variant="outlined" size="small" />
+              </div>
+              { this.renderResponses() }
             </Container>
-          </AppBar>
+            {/* TODO: stickyはレス数が少ないときに表示が崩れる */}
+            <AppBar position="sticky" color="inherit" id="response-form">
+              <Container maxWidth="md">
+                <TextField
+                  id="outlined-multiline-flexible"
+                  label="Name"
+                  fullWidth
+                  variant="outlined"
+                  margin="dense"
+                  value={ this.state.displayName }
+                  onChange={ (e) => this.setState({displayName: e.target.value}) }
+                />
+                <TextField
+                  id="outlined-multiline-flexible"
+                  label="Comment"
+                  autoFocus
+                  fullWidth
+                  multiline
+                  rowsMax="4"
+                  variant="outlined"
+                  margin="dense"
+                  value={ this.state.comment }
+                  onChange={ (e) => this.setState({comment: e.target.value}) }
+                  onKeyDown={ this.sendResponse }
+                />
+              </Container>
+            </AppBar>
+          </div>
         </Bar>
       </div>
     );

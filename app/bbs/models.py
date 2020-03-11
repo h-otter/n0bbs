@@ -39,16 +39,6 @@ class Response(models.Model):
         k = "{}-{}-{}".format(settings.SECRET_KEY, self.responded_at.date(), str(self.responded_by))
         return hashlib.sha256(k.encode()).hexdigest()[:16]
 
-    # def rendered_comment(self):
-    #     c = html.escape(self.comment)
-    #     c = markdown(c)
-    #     c = re.sub(r'&gt;&gt;(\d+)', r'<a href="#r\1">&gt;&gt;\1<a>', c)
-    #     c = safe(c)
-    #     c = linebreaksbr(c)
-    #     c = urlize(c)
-
-    #     return c
-
     def get_dict(self):
         return {
             "responded_by": self.masked_user() if self.thread.anonymous else str(self.responded_by),

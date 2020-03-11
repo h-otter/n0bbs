@@ -47,12 +47,12 @@ class ListThreads extends React.Component<ListThreadsPropsInterface, ListThreads
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  { this.state.threads?.map(t => (
+                  { this.state.threads?.map((t: InlineResponse200Results) => (
                     <TableRow key={ t.id }>
                       {/* <TableRow key={ t.id } hover component="a" href={ ""+t.id }> */}
                       <TableCell component="th" scope="row">
                         <Link to={ "/threads/"+t.id }>
-                          { t.responses_count > t.read_responses_count ? (
+                          { t.responses_count !== undefined && t.read_responses_count !== undefined && t.responses_count > t.read_responses_count ? (
                             <strong>{ t.title }</strong>
                           ) : (
                             <>{ t.title }</>
