@@ -1,5 +1,5 @@
 from django.views.generic import CreateView
-from django.db.models import Max, Count, Q
+from django.db.models import Max, Count, IntegerField, Case, When, Value
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework.viewsets import GenericViewSet
@@ -22,14 +22,17 @@ class ThreadViewSet(mixins.CreateModelMixin,
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # user = self.request.user
+        user = self.request.user
 
         return Thread.objects.annotate(
             responses_count=Count('responses'),
             last_responded_at=Max('responses__responded_at'),
-        ).extra(select={
-            "read_responses_count": 0,
-        }).order_by("-last_responded_at")
+            read_responses_count=Max(Case(
+                When(read_log__user=user, then='read_log__response_count'),
+                default=Value(0),
+                output_field=IntegerField()
+            )),
+        ).order_by("-last_responded_at")
 
 
 class ResponseViewSet(mixins.ListModelMixin, GenericViewSet):
