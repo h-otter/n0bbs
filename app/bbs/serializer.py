@@ -16,8 +16,22 @@ class ThreadSerializer(serializers.ModelSerializer):
     read_responses_count = serializers.IntegerField(read_only=True)
     last_responded_at = serializers.DateTimeField(read_only=True)
 
-    # response = ResponseSerializer(write_only=True)
+    responses = ResponseSerializer(write_only=True, many=True)
 
     class Meta:
         model = Thread
-        fields = ('id', 'title', 'anonymous', 'responses_count', 'read_responses_count', 'last_responded_at')
+        fields = (
+            'id', 
+            'title', 
+            'anonymous', 
+            'responses_count', 
+            'read_responses_count', 
+            'last_responded_at',
+            'responses',
+        )
+
+    def validate_responses(self, value):
+        if len(value) != 1:
+            raise serializers.ValidationError("responses length must be 1")
+
+        return value
