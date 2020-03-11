@@ -1,12 +1,12 @@
 from django.views.generic import CreateView
-from django.db.models import Max, Count, Q
+from django.db.models import Max, Count
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
 from bbs.models import Thread, Response
-from bbs.forms import ResponseForm, ThreadForm
+from bbs.forms import ThreadForm
 from bbs.serializer import ThreadSerializer, ResponseSerializer
 
 
@@ -24,11 +24,10 @@ class ThreadViewSet(mixins.CreateModelMixin,
     def get_queryset(self):
         user = self.request.user
 
-        return Thread.objects.annotate(
+        return Thread.objects.filter(read_log__user=user).annotate(
             responses_count=Count('responses'),
             last_responded_at=Max('responses__responded_at'),
-        ).annotate(
-            read_responses_count=Max('read_log__response_count', filter=Q(read_log__user=user))
+            read_responses_count=Max('read_log__response_count'),
         ).order_by("-last_responded_at")
 
 
