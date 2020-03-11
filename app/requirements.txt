@@ -8,3 +8,4 @@ markdown
 social-auth-app-django
 pyyaml
 uritemplate
+ipython
