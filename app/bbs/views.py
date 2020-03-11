@@ -1,8 +1,5 @@
-from django.utils import timezone
-from django.views.generic import ListView, CreateView, FormView
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
-from django.db.models import Max, Count
+from django.views.generic import CreateView
+from django.db.models import Max, Count, Q
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework.viewsets import GenericViewSet
@@ -13,17 +10,36 @@ from bbs.forms import ResponseForm, ThreadForm
 from bbs.serializer import ThreadSerializer, ResponseSerializer
 
 
-
-
 class ThreadViewSet(mixins.CreateModelMixin,
                     mixins.RetrieveModelMixin,
                     # mixins.UpdateModelMixin,
                     # mixins.DestroyModelMixin,
                     mixins.ListModelMixin,
                     GenericViewSet):
-    queryset = Thread.objects.annotate(responses_count=Count('responses')).annotate(last_responded_at=Max('responses__responded_at')).annotate(read_responses_count=Max('read_log__response_count')).order_by("-last_responded_at")
+    queryset = Thread.objects.all()
+
     serializer_class = ThreadSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        return Thread.objects.annotate(
+            responses_count=Count('responses'),
+            last_responded_at=Max('responses__responded_at'),
+        ).annotate(
+            read_responses_count=Max('read_log__response_count', filter=Q(read_log__user=user))
+        ).order_by("-last_responded_at")
+
+
+class ResponseViewSet(mixins.ListModelMixin, GenericViewSet):
+    queryset = Response.objects.all()
+    serializer_class = ResponseSerializer
+
+    def list(self, request, thread_pk=None):
+        queryset = Answer.objects.filter(thread_id=thread_pk)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CreateThread(CreateView):
