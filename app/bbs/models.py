@@ -3,12 +3,16 @@ import re
 import hashlib
 from markdown import markdown
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.timezone import localtime
 from django.utils import html
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.template.defaultfilters import linebreaksbr, safe, urlize
+
+from bbs.slack import notify
 
 
 # TODO: あとで消す
@@ -24,6 +28,15 @@ class Thread(models.Model):
 
     def __str__(self):
         return self.title
+
+
+@receiver(post_save, sender=Thread)
+def send_to_slack(sender, instance, **kwargs):
+    if len(settings.ALLOWED_HOSTS) >= 1:
+        url =  "https://{}/threads/{}".format(settings.ALLOWED_HOSTS[0], instance.id)
+        notify('「<{}|{}>」'.format(url, instance.title))
+    else:
+        notify('「{}」'.format(instance.title))
 
 
 class Response(models.Model):

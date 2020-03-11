@@ -3,14 +3,15 @@ from django.views.generic import ListView, CreateView, FormView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.db.models import Max, Count
-from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from rest_framework import permissions
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.response import Response
 
 from bbs.models import Thread, Response
 from bbs.forms import ResponseForm, ThreadForm
-from bbs.serializer import ThreadSerializer
-from bbs.slack import notify
+from bbs.serializer import ThreadSerializer, ResponseSerializer
+
 
 
 
@@ -44,6 +45,5 @@ class CreateThread(CreateView):
         # print(form.formset)
 
         # notify('「{}」 \n{}'.format(form.instance.title, form.instance.responses.first().comment))
-        notify('「{}」'.format(form.instance.title))
 
         return super().form_valid(form)
