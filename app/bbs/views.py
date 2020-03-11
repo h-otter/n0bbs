@@ -22,13 +22,14 @@ class ThreadViewSet(mixins.CreateModelMixin,
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
+        # user = self.request.user
 
-        return Thread.objects.filter(Q(read_log__user=user) | Q(read_log__user=None)).annotate(
+        return Thread.objects.annotate(
             responses_count=Count('responses'),
             last_responded_at=Max('responses__responded_at'),
-            read_responses_count=Max('read_log__response_count'),
-        ).order_by("-last_responded_at")
+        ).extra(select={
+            "read_responses_count": 0,
+        }).order_by("-last_responded_at")
 
 
 class ResponseViewSet(mixins.ListModelMixin, GenericViewSet):
