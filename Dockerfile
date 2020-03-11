@@ -23,4 +23,4 @@ FROM nginx
 
 COPY --from=UI /srv/ui/build /usr/share/nginx/html
 COPY --from=APP /srv/app/static /usr/share/nginx/html/api/static
-COPY etc/nginx/conf.d /etc/nginx/conf.d
+COPY production/etc/nginx/conf.d /etc/nginx/conf.d
