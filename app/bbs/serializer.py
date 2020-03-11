@@ -11,4 +11,4 @@ class ThreadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Thread
-        fields = ('id', 'title', 'anonymous', 'archived_at', 'responses_count', 'read_responses_count', 'last_responded_at')
+        fields = ('id', 'title', 'anonymous', 'responses_count', 'read_responses_count', 'last_responded_at')
