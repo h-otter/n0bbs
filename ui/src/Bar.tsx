@@ -57,6 +57,7 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
               <Typography variant="h6">
                 n0bbs
               </Typography>
+              <div style={{ flexGrow: 1 }}></div>
               <IconButton color="inherit" href="/api/threads:new">
                 <AddCircleOutlineIcon />
               </IconButton>
