@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link as ReactLink } from "react-router-dom";
 import {
   Slide,
   AppBar,
@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Link,
  } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -59,14 +60,12 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
     return (
       <div className="bar">
         <HideOnScroll>
-          <AppBar>
+          <AppBar color="inherit">
             <Toolbar variant="dense">
               <IconButton edge="start" color="inherit" aria-label="menu" onClick={ () => {this.setState({drawer: true})} }>
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6">
-                n0bbs
-              </Typography>
+              <Link href="/threads" color="inherit"><Typography variant="h6">n0bbs</Typography></Link>
               <div style={{ flexGrow: 1 }}></div>
               <IconButton color="inherit" href="/api/threads:new">
                 <AddCircleOutlineIcon />
@@ -85,7 +84,7 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
           onClose={ () => {this.setState({drawer: false})} }
         >
           <List dense={ true } style={{width: 240}}>
-            <ListItem button component={Link} to={ "/threads/" }>
+            <ListItem button component={ReactLink} to={ "/threads/" }>
               <ListItemText primary="All Threads" />
             </ListItem>
           </List>

@@ -207,7 +207,6 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
               ))}
               <Button
                 variant="outlined"
-                color="primary"
                 onClick={ this.openDialog }
                 fullWidth
               >
