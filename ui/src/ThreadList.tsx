@@ -13,14 +13,14 @@ import Bar from './Bar';
 
 
 
-interface ListThreadsPropsInterface extends RouteComponentProps<{}> {}
+interface ThreadListPropsInterface extends RouteComponentProps<{}> {}
 
-interface ListThreadsStateInterface {
+interface ThreadListStateInterface {
   threads?: InlineResponse200Results[];
 }
 
-class ListThreads extends React.Component<ListThreadsPropsInterface, ListThreadsStateInterface> {
-  constructor(props: ListThreadsPropsInterface) {
+class ThreadList extends React.Component<ThreadListPropsInterface, ThreadListStateInterface> {
+  constructor(props: ThreadListPropsInterface) {
     super(props);
 
     this.state = {
@@ -35,7 +35,7 @@ class ListThreads extends React.Component<ListThreadsPropsInterface, ListThreads
 
   render() {
     return (
-      <div className="thread-details">
+      <div className="thread-list">
         <Bar>
           <Container maxWidth="xl">
             <List>
@@ -60,4 +60,4 @@ class ListThreads extends React.Component<ListThreadsPropsInterface, ListThreads
 }
 
 
-export default ListThreads;
+export default ThreadList;

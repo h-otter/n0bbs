@@ -8,7 +8,7 @@ import { CssBaseline } from '@material-ui/core';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Top from './Top';
-import ListThreads from './ListThreads';
+import ThreadList from './ThreadList';
 import ThreadDetails from './ThreadDetails';
 import AuthRequired from './AuthRequired';
 
@@ -29,7 +29,7 @@ ReactDOM.render(
         <Route exact path="/" component={Top}></Route>
         <AuthRequired>
           <Switch>
-            <Route exact path="/threads/" component={ListThreads}></Route>
+            <Route exact path="/threads/" component={ThreadList}></Route>
             <Route path="/threads/:id" component={ThreadDetails}></Route>
             <Redirect to="/threads" />
           </Switch>
