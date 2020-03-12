@@ -188,8 +188,13 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                   onReply={ this.onReply }
                 />
               ))}
-              <Button variant="outlined" color="primary" onClick={ () => {this.setState({isOpenDialog: true})} }>
-                Open reply dialog
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={ () => {this.setState({isOpenDialog: true})} }
+                fullWidth
+              >
+                Reply
               </Button>
             </Container>
 
