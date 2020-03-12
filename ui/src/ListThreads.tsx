@@ -41,7 +41,11 @@ class ListThreads extends React.Component<ListThreadsPropsInterface, ListThreads
             <List>
               { this.state.threads?.map((t: InlineResponse200Results) => (
                 <ListItem button component={Link} to={ "/threads/"+t.id } style={{ paddingBottom: 0, paddingTop: 0 }}>
-                  <ListItemText primary={ t.title } secondary={ t.responses_count !== undefined ? "" + t.responses_count : "0" } />
+                  <ListItemText
+                    primary={ t.title }
+                    secondary={ t.responses_count !== undefined ? "" + t.responses_count : "0" }
+                    secondaryTypographyProps={{style: {fontSize: "0.75rem"}}}
+                  />
                   { t.read_responses_count !== undefined && t.responses_count !== undefined && t.responses_count - t.read_responses_count > 0 && 
                     <Chip label={ ""+(t.responses_count - t.read_responses_count) } />
                   }
