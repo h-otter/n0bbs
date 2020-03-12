@@ -12,26 +12,14 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.template.defaultfilters import linebreaksbr, safe, urlize
 
-from bbs.slack import notify
-
 
 class Thread(models.Model):
     # 有効なスレッドの中ではユニークのほうが良さそう
     title = models.CharField("スレタイ", max_length=255, unique=True, null=False)
     anonymous = models.BooleanField("匿名スレ", default=False)
 
-
     def __str__(self):
         return self.title
-
-
-@receiver(post_save, sender=Thread)
-def send_to_slack(sender, instance, **kwargs):
-    if len(settings.ALLOWED_HOSTS) >= 1:
-        url =  "https://{}/threads/{}".format(settings.ALLOWED_HOSTS[0], instance.id)
-        notify('「<{}|{}>」'.format(url, instance.title))
-    else:
-        notify('「{}」'.format(instance.title))
 
 
 class Response(models.Model):

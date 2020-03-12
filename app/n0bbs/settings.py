@@ -113,7 +113,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'n0bbs',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'test',
         'HOST': 'mysql',
         'PORT': 3306,
         'OPTIONS': {'charset': 'utf8mb4'}
@@ -171,9 +171,7 @@ SOCIAL_AUTH_GITHUB_SECRET = os.environ.get("SOCIAL_AUTH_GITHUB_SECRET")
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/threads'
 LOGOUT_REDIRECT_URL = '/'
-SOCIAL_AUTH_REDIRECT_IS_HTTPS=not DEBUG
-
-SLACK_INCOMING_HOOK_URL = os.environ.get("SLACK_INCOMING_HOOK_URL")
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = not DEBUG
 
 import datetime
 DEFAULT_THREAD_ARCHIVE_DURATION = datetime.timedelta(days=3)

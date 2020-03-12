@@ -23,12 +23,16 @@ from rest_framework import routers
 
 from n0bbs.views import index
 from bbs.views import CreateThread, ThreadViewSet
+from bbs.feed import ThreadFeed
 
 
 
 
 router = routers.DefaultRouter()
 router.register(r'threads', ThreadViewSet)
+
+# categories_router = routers.NestedSimpleRouter(router, r'threads', lookup='thread')
+# categories_router.register(r'responses', ResponseViewSet)
 
 
 urlpatterns = [
@@ -39,7 +43,8 @@ urlpatterns = [
 
     path('api/', include(router.urls)),
 
-
+    # TODO: セキュリティのために乱数を入れる
+    path('api/threads:rss', ThreadFeed()),
     path('api/threads:new', login_required(CreateThread.as_view()), name="create_thread"),
 
     path('', index, name='index'),
