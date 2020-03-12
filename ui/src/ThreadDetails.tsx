@@ -1,8 +1,14 @@
 import React from 'react';
-import { Fab, Container, Tooltip, Chip, AppBar, TextField } from '@material-ui/core';
+import {
+  Container,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Button,
+ } from '@material-ui/core';
 import { RouteComponentProps } from "react-router-dom";
 import Push from "push.js"
-import EditIcon from '@material-ui/icons/Edit';
 
 import "./ThreadDetails.css";
 import Response from './Response';
@@ -17,6 +23,7 @@ interface ThreadDetailsStateInterface {
   responses: ResponseInstance[];
   websocket: WebSocket;
 
+  isOpenDialog: boolean;
   displayName: string;
   comment: string;
 
@@ -39,6 +46,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       responses: [],
       websocket: new WebSocket(url),
 
+      isOpenDialog: false,
       displayName: "n0nameさん",
       comment: "",
 
@@ -58,7 +66,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     this.state.websocket.onmessage = (e) => {
       let data = JSON.parse(e.data)
       console.log(data)
-    
+
 
       let responses: ResponseInstance[] = []
       switch (data.type) {
@@ -82,7 +90,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
           responses: data.message.responses,
         })
         break;
-    
+
       case "new_response":
         responses = this.state.responses
         let i = responses.length
@@ -98,11 +106,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
             responses[v].referenced?.push(i)
           }
         })
-        
+
         this.setState({
           responses: responses,
         })
-    
+
         // TODO: 自分が送ったものの通知はいらない
         Push.create("", {
           body: data.message.comment,
@@ -115,7 +123,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
         // TODO: ページのスクロールが最下部だったら以下を実行する
         // window.location.hash = "#r"+this.state.responses.length;
 
-        
+
         break;
       }
     }
@@ -127,22 +135,26 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
   }
 
 
-  sendResponse = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.keyCode === 13 && !e.shiftKey) {
-      if (this.state.comment === "") {
-        return
-      }
+  sendResponse = () => {
+    this.state.websocket.send(JSON.stringify({
+      'type': 'new_response',
+      'message': {
+        'display_name': this.state.displayName,
+        'comment': this.state.comment,
+      },
+    }));
 
-      this.state.websocket.send(JSON.stringify({
-        'type': 'new_response',
-        'message': {
-          'display_name': this.state.displayName,
-          'comment': this.state.comment,
-        },
-      }));
+    this.setState({
+      comment: "",
+      isOpenDialog: false,
+    });
+  }
 
-      this.setState({comment: ""});
-    }
+  onReply = (i: number) => {
+    this.setState({
+      comment: ">>"+(i+1)+" ",
+      isOpenDialog: true,
+    });
   }
 
   componentWillUnmount = () => {
@@ -159,17 +171,22 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                 <h1>{ this.state.thread.title }</h1>
               </div>
               { this.state.responses.map((r, i) => (
-                <Response unread={ true } i={ i } responses={ this.state.responses } nested={ 0 } />
+                <Response
+                  unread={ true }
+                  i={ i }
+                  responses={ this.state.responses }
+                  nested={ 0 }
+                  onReply={ this.onReply }
+                />
               ))}
             </Container>
 
-            {/* <Fab color="secondary">
-              <EditIcon />
-            </Fab> */}
-
-            {/* TODO: stickyはレス数が少ないときに表示が崩れる */}
-            <AppBar position="sticky" color="inherit" id="response-form">
-              <Container maxWidth="md">
+            <Button variant="outlined" color="primary" onClick={ () => {this.setState({isOpenDialog: true})} }>
+              Open reply dialog
+            </Button>
+            <Dialog open={ this.state.isOpenDialog } onClose={ () => {this.setState({isOpenDialog: false})} } aria-labelledby="form-dialog-title">
+              {/* <DialogTitle id="form-dialog-title">Reply</DialogTitle> */}
+              <DialogContent>
                 <TextField
                   id="outlined-multiline-flexible"
                   label="Name"
@@ -185,15 +202,19 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                   autoFocus
                   fullWidth
                   multiline
-                  rowsMax="4"
+                  rowsMax="10"
                   variant="outlined"
                   margin="dense"
                   value={ this.state.comment }
                   onChange={ (e) => this.setState({comment: e.target.value}) }
-                  onKeyDown={ this.sendResponse }
                 />
-              </Container>
-            </AppBar>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={ this.sendResponse } color="primary">
+                  Reply
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </Bar>
       </div>
