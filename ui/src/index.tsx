@@ -31,7 +31,7 @@ ReactDOM.render(
           <Switch>
             <Route exact path="/threads/" component={ListThreads}></Route>
             <Route path="/threads/:id" component={ThreadDetails}></Route>
-            <Redirect to="/"></Redirect>
+            <Redirect to="/threads" />
           </Switch>
         </AuthRequired>
       </Switch>

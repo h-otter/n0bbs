@@ -1,5 +1,5 @@
 import React from 'react';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import { Redirect } from "react-router-dom";
 
 import { DefaultApi } from './axios-client/api';
 
@@ -30,8 +30,8 @@ class AuthRequired extends React.Component<AuthRequiredPropsInterface, AuthRequi
   
   render() {
     return (
-      <div className="bar">
-        { this.state.isLoggedIn ? this.props.children : <a href="/auth/login/github/">Login with <GitHubIcon /></a> }
+      <div className="Bar">
+        { this.state.isLoggedIn ? this.props.children : <Redirect to="/" /> }
       </div>
     );
   }
