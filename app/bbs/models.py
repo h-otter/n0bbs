@@ -1,7 +1,4 @@
-import datetime
-import re
 import hashlib
-from markdown import markdown
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -10,7 +7,6 @@ from django.utils.timezone import localtime
 from django.utils import html
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.template.defaultfilters import linebreaksbr, safe, urlize
 
 from bbs.slack import notify
 
@@ -45,7 +41,7 @@ class Response(models.Model):
 
     def masked_user(self):
         k = "{}-{}-{}".format(settings.SECRET_KEY, self.responded_at.date(), str(self.responded_by))
-        return hashlib.sha256(k.encode()).hexdigest()[:16]
+        return hashlib.sha256(k.encode()).hexdigest()[:8]
 
     def get_dict(self):
         return {
