@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, IconButton } from '@material-ui/core';
+import { Paper, IconButton, Typography } from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
 import * as emojione from 'emojione';
 
@@ -37,18 +37,18 @@ class Response extends React.Component<ResponsePropsInterface, ResponsepropsInte
     comment = comment.replace(/&gt;&gt;(\d+)/g, '<a href="#r$1">&gt;&gt;$1</a>');
     comment = emojione.toImage(comment);
 
-    return <p dangerouslySetInnerHTML={{
+    return <Typography variant="body1" dangerouslySetInnerHTML={{
       __html: comment
-    }}></p>
+    }}></Typography>
   }
 
   render() {
     return (
       <div className="response">
         <Paper id={ "r"+(this.props.i+1) } variant="outlined" square>
-          <p style={{fontSize: '0.75rem'}}>
+          <Typography variant="caption">
             <a href={ "#r"+(this.props.i + 1) }>{ this.props.i + 1 }.</a> { this.props.responses[this.props.i].display_name } { this.props.responses[this.props.i].responded_at } id:{ this.props.responses[this.props.i].responded_by } <IconButton color="inherit" style={{padding: '0'}} onClick={ () => {this.props.onReply(this.props.i)} }><ReplyIcon style={{fontSize: '0.75rem'}} /></IconButton>
-          </p>
+          </Typography>
           { this.renderComment() }
         </Paper>
 
