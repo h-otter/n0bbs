@@ -157,8 +157,6 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
             <Container id="responses" maxWidth="xl">
               <div>
                 <h1>{ this.state.thread.title }</h1>
-                <Chip label={ "Archive at "+this.state.thread.archived_at } variant="outlined" size="small" />
-                <Chip label="Anonymous" variant="outlined" size="small" />
               </div>
               { this.state.responses.map((r, i) => (
                 <Response unread={ true } i={ i } responses={ this.state.responses } />
