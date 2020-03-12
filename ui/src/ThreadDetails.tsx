@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   Button,
+  Typography,
  } from '@material-ui/core';
 import { RouteComponentProps } from "react-router-dom";
 import Push from "push.js"
@@ -137,14 +138,14 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
   }
 
   // TODO: 要高速化
-  // TODO: <a> タグではなく <Link> タグを使う
+  // WARNING: <a> タグではなく <Link> タグを使う -> classだけとりあえず真似ることにした
   renderComment(comment: string) {
+    // urlize
+    comment = comment.replace(/(http[s]?:\/\/[^\s\r\n]*)/g, '<a href="$1" class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorInherit">$1</a>');
+    // anchor to >>1
+    comment = comment.replace(/&gt;&gt;(\d+)/g, '<a href="#r$1" class="MuiTypography-root MuiLink-root MuiLink-underlineHover MuiTypography-colorInherit">&gt;&gt;$1</a>');
     // break lines
     comment = comment.replace(/\r?\n/g, "<br>");
-    // urlize
-    comment = comment.replace(/(http[s]?:\/\/.*)[\s\r\n]*/g, '<a href="$1">$1</a>');
-    // anchor to >>1
-    comment = comment.replace(/&gt;&gt;(\d+)/g, '<a href="#r$1">&gt;&gt;$1</a>');
     comment = emojione.toImage(comment);
 
     return comment
