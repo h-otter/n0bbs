@@ -145,16 +145,6 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     }
   }
 
-  renderResponses() {
-    let list: any[] = [];
-
-    this.state.responses.forEach((r, i) => {
-      list.push(<Response unread={ true } i={ i } responses={ this.state.responses } />)
-    })
-
-    return <>{ list }</>
-  }
-
   componentWillUnmount = () => {
     this.state.websocket.close();
   }
@@ -170,7 +160,9 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                 <Chip label={ "Archive at "+this.state.thread.archived_at } variant="outlined" size="small" />
                 <Chip label="Anonymous" variant="outlined" size="small" />
               </div>
-              { this.renderResponses() }
+              { this.state.responses.map((r, i) => (
+                <Response unread={ true } i={ i } responses={ this.state.responses } />
+              ))}
             </Container>
 
             {/* <Fab color="secondary">
