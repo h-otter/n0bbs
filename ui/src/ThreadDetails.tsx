@@ -9,6 +9,7 @@ import {
  } from '@material-ui/core';
 import { RouteComponentProps } from "react-router-dom";
 import Push from "push.js"
+import * as emojione from 'emojione';
 
 import "./ThreadDetails.css";
 import Response from './Response';
@@ -71,21 +72,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       case "all_responses":
         responses = data.message.responses
         responses.forEach((res, i) => {
-          let result = res.comment.match(/&gt;&gt;\d+/g)
-          responses[i].parents = result?.map((v) => {
-            return parseInt(v.replace("&gt;&gt;", "")) - 1
-          })
-          responses[i].parents?.forEach((v) => {
-            if (responses[v].referenced === undefined) {
-              responses[v].referenced = [i]
-            } else {
-              responses[v].referenced?.push(i)
-            }
-          })
+          responses = this.initializeResponseInstance(responses, i)
         })
 
         this.setState({
-          responses: data.message.responses,
+          responses: responses,
         })
         break;
 
@@ -94,20 +85,8 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
         let i = responses.length
         responses.push(data.message)
 
-        let result = responses[i].comment.match(/&gt;&gt;\d+/g)
-        responses[i].parents = result?.map((v: string) => {
-          return parseInt(v.replace("&gt;&gt;", "")) - 1
-        })
-        responses[i].parents?.forEach((v: number) => {
-          if (responses[v].referenced === undefined) {
-            responses[v].referenced = [i]
-          } else {
-            responses[v].referenced?.push(i)
-          }
-        })
-
         this.setState({
-          responses: responses,
+          responses: this.initializeResponseInstance(responses, i),
         })
 
         // TODO: 自分が送ったものの通知はいらない
@@ -129,6 +108,8 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     this.onReply = this.onReply.bind(this)
     this.handleChangeDisplayName = this.handleChangeDisplayName.bind(this)
     this.handleChangeComment = this.handleChangeComment.bind(this)
+    this.openDialog = this.openDialog.bind(this)
+    this.closeDialog = this.closeDialog.bind(this)
 
     let baseurl = window.location.protocol+"//"+window.location.host
     new DefaultApi({ basePath: baseurl }).retrieveThread(this.props.match.params.id).then((res) => {
@@ -155,6 +136,36 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     });
   }
 
+  renderComment(comment: string) {
+    // break lines
+    comment = comment.replace(/\r?\n/g, "<br>");
+    // urlize
+    comment = comment.replace(/(http[s]?:\/\/.*)[\s\r\n]*/g, '<a href="$1">$1</a>');
+    // anchor to >>1
+    comment = comment.replace(/&gt;&gt;(\d+)/g, '<a href="#r$1">&gt;&gt;$1</a>');
+    comment = emojione.toImage(comment);
+
+    return comment
+  }
+
+  initializeResponseInstance(responses: ResponseInstance[], i: number) {
+    let result = responses[i].comment.match(/&gt;&gt;\d+/g)
+    responses[i].parents = result?.map((v: string) => {
+      return parseInt(v.replace("&gt;&gt;", "")) - 1
+    })
+    responses[i].parents?.forEach((v: number) => {
+      if (responses[v].referenced === undefined) {
+        responses[v].referenced = [i]
+      } else {
+        responses[v].referenced?.push(i)
+      }
+    })
+
+    responses[i].comment = this.renderComment(responses[i].comment)
+
+    return responses
+  }
+
   onReply(i: number) {
     this.setState({
       comment: ">>"+(i+1)+" ",
@@ -167,6 +178,12 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
   }
   handleChangeComment(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({comment: e.target.value});
+  }
+  openDialog() {
+    this.setState({isOpenDialog: true});
+  }
+  closeDialog() {
+    this.setState({isOpenDialog: false});
   }
 
 
@@ -191,14 +208,14 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
               <Button
                 variant="outlined"
                 color="primary"
-                onClick={ () => {this.setState({isOpenDialog: true})} }
+                onClick={ this.openDialog }
                 fullWidth
               >
                 Reply
               </Button>
             </Container>
 
-            <Dialog open={ this.state.isOpenDialog } onClose={ () => {this.setState({isOpenDialog: false})} } aria-labelledby="form-dialog-title">
+            <Dialog open={ this.state.isOpenDialog } onClose={ this.closeDialog } aria-labelledby="form-dialog-title">
               {/* <DialogTitle id="form-dialog-title">Reply</DialogTitle> */}
               <DialogContent>
                 <TextField
