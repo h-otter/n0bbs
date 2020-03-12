@@ -54,7 +54,7 @@ class Response extends React.Component<ResponsePropsInterface, ResponsepropsInte
         </Paper>
 
         <div className="child-responses">
-          { this.props.nested + 1 < 3 && this.props.responses[this.props.i].referenced?.map((r) => (
+          { this.props.nested + 1 < 1 && this.props.responses[this.props.i].referenced?.map((r) => (
             <Response 
               unread={ this.props.unread } 
               i={ r } 
