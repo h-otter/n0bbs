@@ -179,11 +179,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                   onReply={ this.onReply }
                 />
               ))}
+              <Button variant="outlined" color="primary" onClick={ () => {this.setState({isOpenDialog: true})} }>
+                Open reply dialog
+              </Button>
             </Container>
 
-            <Button variant="outlined" color="primary" onClick={ () => {this.setState({isOpenDialog: true})} }>
-              Open reply dialog
-            </Button>
             <Dialog open={ this.state.isOpenDialog } onClose={ () => {this.setState({isOpenDialog: false})} } aria-labelledby="form-dialog-title">
               {/* <DialogTitle id="form-dialog-title">Reply</DialogTitle> */}
               <DialogContent>
