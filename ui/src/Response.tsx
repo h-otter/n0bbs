@@ -2,7 +2,6 @@ import React from 'react';
 import { Paper, IconButton, Typography, Link } from '@material-ui/core';
 import ReplyIcon from '@material-ui/icons/Reply';
 
-import './Response.css';
 import ResponseInstance from './ResponseInstance';
 
 
@@ -39,7 +38,7 @@ class Response extends React.Component<ResponsePropsInterface, ResponsepropsInte
           }}></Typography>
         </Paper>
 
-        <div className="child-responses">
+        <div style={{marginLeft: "0.5rem"}}>
           { this.props.responses[this.props.i].referenced?.map((r) => (
             <Response
               key={ ""+(this.props.i)+"-"+r }
