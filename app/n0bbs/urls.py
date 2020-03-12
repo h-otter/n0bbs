@@ -19,23 +19,18 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from rest_framework import routers
 
-from n0bbs.views import index
-from bbs.views import ThreadViewSet
-
-
+from bbs.views import ThreadViewSet, BoardViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'threads', ThreadViewSet)
+router.register(r'boards', BoardViewSet)
 
 
 urlpatterns = [
-    path('api/admin/', admin.site.urls),
-
     path('auth/', include('social_django.urls', namespace='social')),
     path('auth/logout/', LogoutView.as_view(), name='logout'),
 
+    path('api/admin/', admin.site.urls),
     path('api/', include(router.urls)),
-
-    path('', index, name='index'),
 ]
