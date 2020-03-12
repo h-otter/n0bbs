@@ -12,7 +12,7 @@ interface ResponsePropsInterface {
   i: number;
   unread: boolean;
 
-  isChild?: boolean;
+  nested: number;
 }
 
 interface ResponsepropsInterface {
@@ -44,7 +44,7 @@ class Response extends React.Component<ResponsePropsInterface, ResponsepropsInte
   render() {
     return (
       <div className="response">
-        <Paper id={ this.props.isChild !== undefined && this.props.isChild ? "" : "r"+(this.props.i+1) } variant="outlined" square>
+        <Paper id={ this.props.nested == 0 ? "r"+(this.props.i+1) : "" } variant="outlined" square>
           <p style={{fontSize: '0.75em'}}>
             <a href={ "#r"+(this.props.i + 1) }>{ this.props.i + 1 }.</a> { this.props.responses[this.props.i].display_name } { this.props.responses[this.props.i].responded_at } id:{ this.props.responses[this.props.i].responded_by }
           </p>
@@ -52,8 +52,8 @@ class Response extends React.Component<ResponsePropsInterface, ResponsepropsInte
         </Paper>
 
         <div className="child-responses">
-          { this.props.responses[this.props.i].referenced?.map((r) => (
-            <Response unread={ this.props.unread } i={ r } responses={ this.props.responses } isChild={ true } />
+          { this.props.nested + 1 < 3 && this.props.responses[this.props.i].referenced?.map((r) => (
+            <Response unread={ this.props.unread } i={ r } responses={ this.props.responses } nested={ this.props.nested + 1 } />
           )) }
         </div>
       </div>

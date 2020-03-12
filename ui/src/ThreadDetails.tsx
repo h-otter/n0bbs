@@ -159,7 +159,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                 <h1>{ this.state.thread.title }</h1>
               </div>
               { this.state.responses.map((r, i) => (
-                <Response unread={ true } i={ i } responses={ this.state.responses } />
+                <Response unread={ true } i={ i } responses={ this.state.responses } nested={ 0 } />
               ))}
             </Container>
 
