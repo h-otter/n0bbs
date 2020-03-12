@@ -29,7 +29,7 @@ ReactDOM.render(
         <Route exact path="/" component={Top}></Route>
         <AuthRequired>
           <Switch>
-            <Route exact path="/threads/" component={ThreadList}></Route>
+            <Route exact path="/threads" component={ThreadList}></Route>
             <Route path="/threads/:id" component={ThreadDetails}></Route>
             <Redirect to="/threads" />
           </Switch>

@@ -17,6 +17,8 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import ThreadDialog from './ThreadDialog'
+
 
 // https://material-ui.com/components/app-bar/#hide-app-bar
 interface HideOnScrollProps {
@@ -45,6 +47,7 @@ interface BarThreadsPropsInterface {
 
 interface BarThreadsStateInterface {
   drawer: boolean;
+  dialog: boolean;
 }
 
 class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInterface> {
@@ -53,8 +56,20 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
 
     this.state = {
       drawer: false,
+      dialog: false,
     };
+
+    this.openDialog = this.openDialog.bind(this)
+    this.closeDialog = this.closeDialog.bind(this)
   }
+
+  openDialog() {
+    this.setState({dialog: true});
+  }
+  closeDialog() {
+    this.setState({dialog: false});
+  }
+
 
   render() {
     return (
@@ -67,7 +82,7 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
               </IconButton>
               <Link href="/threads" color="inherit"><Typography variant="h6">n0bbs</Typography></Link>
               <div style={{ flexGrow: 1 }}></div>
-              <IconButton color="inherit" href="/api/threads:new">
+              <IconButton color="inherit" onClick={ this.openDialog }>
                 <AddCircleOutlineIcon />
               </IconButton>
               <IconButton color="inherit" href="/auth/logout">
@@ -89,6 +104,8 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
             </ListItem>
           </List>
         </Drawer>
+
+        <ThreadDialog open={ this.state.dialog } onClose={ this.closeDialog } />
       </div>
     );
   }

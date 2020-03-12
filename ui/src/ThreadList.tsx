@@ -40,7 +40,7 @@ class ThreadList extends React.Component<ThreadListPropsInterface, ThreadListSta
           <Container maxWidth="xl">
             <List>
               { this.state.threads?.map((t: InlineResponse200Results) => (
-                <ListItem button component={Link} to={ "/threads/"+t.id } style={{ paddingBottom: 0, paddingTop: 0 }}>
+                <ListItem key={ "t"+t.id } button component={Link} to={ "/threads/"+t.id } style={{ paddingBottom: 0, paddingTop: 0 }}>
                   <ListItemText
                     primary={ t.title }
                     secondary={ t.responses_count !== undefined ? "" + t.responses_count : "0" }

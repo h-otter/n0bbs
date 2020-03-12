@@ -35,3 +35,14 @@ class ThreadSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("responses length must be 1")
 
         return value
+
+    def create(self, validated_data):
+        responses_data = validated_data.pop('responses')
+        user = validated_data.pop('user')
+        item = Thread.objects.create(**validated_data)
+
+        responses = []
+        for r in responses_data:
+            responses.append(Response.objects.create(thread=item, responded_by=user, **r))
+
+        return item

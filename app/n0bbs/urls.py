@@ -17,12 +17,10 @@ from django.urls import path
 from django.conf.urls import include
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
-from django.contrib.auth.decorators import login_required
-# from django.contrib.admin.views.decorators import staff_member_required
 from rest_framework import routers
 
 from n0bbs.views import index
-from bbs.views import CreateThread, ThreadViewSet
+from bbs.views import ThreadViewSet
 
 
 
@@ -38,9 +36,6 @@ urlpatterns = [
     path('auth/logout/', LogoutView.as_view(), name='logout'),
 
     path('api/', include(router.urls)),
-
-
-    path('api/threads:new', login_required(CreateThread.as_view()), name="create_thread"),
 
     path('', index, name='index'),
 ]

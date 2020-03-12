@@ -221,7 +221,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
               <DialogContent>
                 <TextField
                   id="outlined-multiline-flexible"
-                  label="Name"
+                  label="Display Name"
                   fullWidth
                   variant="outlined"
                   margin="dense"
