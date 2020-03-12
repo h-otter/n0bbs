@@ -64,11 +64,6 @@
                           "anonymous": {
                             "type": "boolean"
                           },
-                          "archived_at": {
-                            "type": "string",
-                            "format": "date-time",
-                            "nullable": true
-                          },
                           "responses_count": {
                             "type": "integer",
                             "readOnly": true
@@ -113,14 +108,30 @@
                   "anonymous": {
                     "type": "boolean"
                   },
-                  "archived_at": {
-                    "type": "string",
-                    "format": "date-time",
-                    "nullable": true
+                  "responses": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "display_name": {
+                          "type": "string",
+                          "maxLength": 65
+                        },
+                        "comment": {
+                          "type": "string",
+                          "maxLength": 4095
+                        }
+                      },
+                      "required": [
+                        "comment"
+                      ]
+                    },
+                    "writeOnly": true
                   }
                 },
                 "required": [
-                  "title"
+                  "title",
+                  "responses"
                 ]
               }
             },
@@ -135,14 +146,30 @@
                   "anonymous": {
                     "type": "boolean"
                   },
-                  "archived_at": {
-                    "type": "string",
-                    "format": "date-time",
-                    "nullable": true
+                  "responses": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "display_name": {
+                          "type": "string",
+                          "maxLength": 65
+                        },
+                        "comment": {
+                          "type": "string",
+                          "maxLength": 4095
+                        }
+                      },
+                      "required": [
+                        "comment"
+                      ]
+                    },
+                    "writeOnly": true
                   }
                 },
                 "required": [
-                  "title"
+                  "title",
+                  "responses"
                 ]
               }
             },
@@ -157,14 +184,30 @@
                   "anonymous": {
                     "type": "boolean"
                   },
-                  "archived_at": {
-                    "type": "string",
-                    "format": "date-time",
-                    "nullable": true
+                  "responses": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "display_name": {
+                          "type": "string",
+                          "maxLength": 65
+                        },
+                        "comment": {
+                          "type": "string",
+                          "maxLength": 4095
+                        }
+                      },
+                      "required": [
+                        "comment"
+                      ]
+                    },
+                    "writeOnly": true
                   }
                 },
                 "required": [
-                  "title"
+                  "title",
+                  "responses"
                 ]
               }
             }
@@ -187,11 +230,6 @@
                     },
                     "anonymous": {
                       "type": "boolean"
-                    },
-                    "archived_at": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
                     },
                     "responses_count": {
                       "type": "integer",
@@ -250,11 +288,6 @@
                     },
                     "anonymous": {
                       "type": "boolean"
-                    },
-                    "archived_at": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
                     },
                     "responses_count": {
                       "type": "integer",

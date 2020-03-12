@@ -22,6 +22,25 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface ApiThreadsResponses
+ */
+export interface ApiThreadsResponses {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiThreadsResponses
+     */
+    display_name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiThreadsResponses
+     */
+    comment: string;
+}
+/**
+ * 
+ * @export
  * @interface InlineObject
  */
 export interface InlineObject {
@@ -39,10 +58,10 @@ export interface InlineObject {
     anonymous?: boolean;
     /**
      * 
-     * @type {string}
+     * @type {Array<ApiThreadsResponses>}
      * @memberof InlineObject
      */
-    archived_at?: string | null;
+    responses: Array<ApiThreadsResponses>;
 }
 /**
  * 
@@ -99,12 +118,6 @@ export interface InlineResponse200Results {
      * @memberof InlineResponse200Results
      */
     anonymous?: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof InlineResponse200Results
-     */
-    archived_at?: string | null;
     /**
      * 
      * @type {number}
