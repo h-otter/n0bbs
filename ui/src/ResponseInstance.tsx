@@ -5,6 +5,7 @@ interface ResponseInstance {
   comment: string;
 
   referenced?: number[];
+  parents?: number[];
 }
 
 export default ResponseInstance;

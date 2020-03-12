@@ -65,8 +65,6 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     };
     this.state.websocket.onmessage = (e) => {
       let data = JSON.parse(e.data)
-      console.log(data)
-
 
       let responses: ResponseInstance[] = []
       switch (data.type) {
@@ -74,10 +72,10 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
         responses = data.message.responses
         responses.forEach((res, i) => {
           let result = res.comment.match(/&gt;&gt;\d+/g)
-          result?.map((v) => {
+          responses[i].parents = result?.map((v) => {
             return parseInt(v.replace("&gt;&gt;", "")) - 1
-          }).forEach((v) => {
-            console.log(""+v+i)
+          })
+          responses[i].parents?.forEach((v) => {
             if (responses[v].referenced === undefined) {
               responses[v].referenced = [i]
             } else {
@@ -97,9 +95,10 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
         responses.push(data.message)
 
         let result = responses[i].comment.match(/&gt;&gt;\d+/g)
-        result?.map((v: string) => {
+        responses[i].parents = result?.map((v: string) => {
           return parseInt(v.replace("&gt;&gt;", "")) - 1
-        }).forEach((v: number) => {
+        })
+        responses[i].parents?.forEach((v: number) => {
           if (responses[v].referenced === undefined) {
             responses[v].referenced = [i]
           } else {
@@ -119,14 +118,17 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
           }
         });
 
-
         // TODO: ページのスクロールが最下部だったら以下を実行する
         // window.location.hash = "#r"+this.state.responses.length;
-
 
         break;
       }
     }
+
+    this.sendResponse = this.sendResponse.bind(this)
+    this.onReply = this.onReply.bind(this)
+    this.handleChangeDisplayName = this.handleChangeDisplayName.bind(this)
+    this.handleChangeComment = this.handleChangeComment.bind(this)
 
     let baseurl = window.location.protocol+"//"+window.location.host
     new DefaultApi({ basePath: baseurl }).retrieveThread(this.props.match.params.id).then((res) => {
@@ -134,8 +136,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     })
   }
 
+  componentWillUnmount() {
+    this.state.websocket.close();
+  }
 
-  sendResponse = () => {
+  sendResponse() {
     this.state.websocket.send(JSON.stringify({
       'type': 'new_response',
       'message': {
@@ -150,16 +155,20 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     });
   }
 
-  onReply = (i: number) => {
+  onReply(i: number) {
     this.setState({
       comment: ">>"+(i+1)+" ",
       isOpenDialog: true,
     });
   }
 
-  componentWillUnmount = () => {
-    this.state.websocket.close();
+  handleChangeDisplayName(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({displayName: e.target.value});
   }
+  handleChangeComment(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({comment: e.target.value});
+  }
+
 
   render() {
     return (
@@ -171,8 +180,8 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                 <h1>{ this.state.thread.title }</h1>
               </div>
               { this.state.responses.map((r, i) => (
-                <Response
-                  unread={ true }
+                (r.parents === undefined || r.parents?.length == 0) && <Response
+                  key={ i }
                   i={ i }
                   responses={ this.state.responses }
                   nested={ 0 }
@@ -194,7 +203,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                   variant="outlined"
                   margin="dense"
                   value={ this.state.displayName }
-                  onChange={ (e) => this.setState({displayName: e.target.value}) }
+                  onChange={ this.handleChangeDisplayName }
                 />
                 <TextField
                   id="outlined-multiline-flexible"
@@ -206,7 +215,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                   variant="outlined"
                   margin="dense"
                   value={ this.state.comment }
-                  onChange={ (e) => this.setState({comment: e.target.value}) }
+                  onChange={ this.handleChangeComment }
                 />
               </DialogContent>
               <DialogActions>
