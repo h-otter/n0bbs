@@ -5,11 +5,11 @@ from bbs.models import Thread
 
 class ThreadFeed(Feed):
     title = "n0bbs Threads"
-    link = "threads"
+    link = "/threads"
     description = ""
 
     def items(self):
-        return Thread.objects.all().prefetch_related("responses")[:30]
+        return Thread.objects.all().prefetch_related("responses").order_by('-id')[:30]
 
     def item_title(self, item):
         return item.title
