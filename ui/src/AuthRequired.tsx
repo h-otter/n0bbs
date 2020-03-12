@@ -5,7 +5,7 @@ import { DefaultApi } from './axios-client/api';
 
 
 interface AuthRequiredPropsInterface {
-  children: React.ReactElement[];
+  children: React.ReactElement;
 }
 
 interface AuthRequiredStateInterface {

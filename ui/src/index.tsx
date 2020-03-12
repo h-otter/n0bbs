@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import teal from '@material-ui/core/colors/teal';
 import { CssBaseline } from '@material-ui/core';
 
 import './index.css';
 import * as serviceWorker from './serviceWorker';
+import Top from './Top';
 import ListThreads from './ListThreads';
 import ThreadDetails from './ThreadDetails';
 import AuthRequired from './AuthRequired';
@@ -24,10 +25,16 @@ ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <CssBaseline />
     <Router>
-      <AuthRequired>
-        <Route exact path="/threads/" component={ListThreads}></Route>
-        <Route path="/threads/:id" component={ThreadDetails}></Route>
-      </AuthRequired>
+      <Switch>
+        <Route exact path="/" component={Top}></Route>
+        <AuthRequired>
+          <Switch>
+            <Route exact path="/threads/" component={ListThreads}></Route>
+            <Route path="/threads/:id" component={ThreadDetails}></Route>
+            <Redirect to="/"></Redirect>
+          </Switch>
+        </AuthRequired>
+      </Switch>
     </Router>
   </MuiThemeProvider>,
 document.getElementById('root'));

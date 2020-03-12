@@ -136,6 +136,8 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     });
   }
 
+  // TODO: 要高速化
+  // TODO: <a> タグではなく <Link> タグを使う
   renderComment(comment: string) {
     // break lines
     comment = comment.replace(/\r?\n/g, "<br>");
@@ -197,7 +199,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                 <h1>{ this.state.thread.title }</h1>
               </div>
               { this.state.responses.map((r, i) => (
-                (r.parents === undefined || r.parents?.length == 0) && <Response
+                (r.parents === undefined || r.parents?.length === 0) && <Response
                   key={ i }
                   i={ i }
                   responses={ this.state.responses }
