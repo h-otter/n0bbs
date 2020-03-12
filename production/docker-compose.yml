@@ -21,6 +21,7 @@ services:
       DEBUG: "false"
       SECRET_KEY:
       ALLOWED_HOST:
+      SLACK_INCOMING_HOOK_URL:
       SOCIAL_AUTH_GITHUB_KEY:
       SOCIAL_AUTH_GITHUB_SECRET:
     links:

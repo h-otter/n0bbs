@@ -113,7 +113,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'n0bbs',
         'USER': 'root',
-        'PASSWORD': 'test',
+        'PASSWORD': 'root',
         'HOST': 'mysql',
         'PORT': 3306,
         'OPTIONS': {'charset': 'utf8mb4'}
@@ -172,6 +172,8 @@ LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/threads'
 LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = not DEBUG
+
+SLACK_INCOMING_HOOK_URL = os.environ.get("SLACK_INCOMING_HOOK_URL")
 
 import datetime
 DEFAULT_THREAD_ARCHIVE_DURATION = datetime.timedelta(days=3)
