@@ -36,7 +36,7 @@ class Response extends React.Component<ResponsePropsInterface, ResponsepropsInte
     return (
       <div className="response">
         <Paper id={ "r"+(this.props.i+1) } variant="outlined" square style={{margin: 'auto'}}>
-          <Grid container spacing={2}>
+          <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography variant="caption">
                 <Link href={ "#r"+(this.props.i + 1) } color="inherit">
