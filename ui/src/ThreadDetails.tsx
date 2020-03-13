@@ -59,11 +59,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
 
     this.state.websocket.onclose = (e) => {
       // TODO: thread title
-      Push.create("websocket is closed, please reload", {
-        onClick: function () {
-            window.focus();
-        }
-      });
+      // Push.create("websocket is closed, please reload", {
+      //   onClick: function () {
+      //       window.focus();
+      //   }
+      // });
     };
     this.state.websocket.onmessage = (e) => {
       let data = JSON.parse(e.data)
