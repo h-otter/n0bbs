@@ -24,14 +24,19 @@ class ImageUploadButton extends React.Component<ImageUploadButtonPropsInterface,
   }
 
   uploadImage(e: React.ChangeEvent<HTMLInputElement>) {
-    let file = e.target.files?.item(0);
+    let files = e.target.files;
+    if (files !== null) {
+      let baseurl = window.location.protocol+"//"+window.location.host
+      let api = new DefaultApi({ basePath: baseurl })
 
-    let baseurl = window.location.protocol+"//"+window.location.host
-    new DefaultApi({ basePath: baseurl }).createImage(file, {headers: {'X-CSRFToken': Cookies.get('csrftoken')}}).then((res) => {
-      this.props.onUpload(res.data.image)
-    }).catch((err) => {
-      console.log(err)
-    })
+      for (let i = 0; i < files?.length; i++) {
+        api.createImage(files?.item(i), {headers: {'X-CSRFToken': Cookies.get('csrftoken')}}).then((res) => {
+          this.props.onUpload(res.data.image)
+        }).catch((err) => {
+          console.log(err)
+        })
+      }
+    }
   }
 
   render() {
