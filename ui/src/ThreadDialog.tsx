@@ -7,14 +7,13 @@ import {
   DialogActions,
   DialogContent,
   Button,
+  IconButton,
   FormControlLabel,
- } from '@material-ui/core';
+} from '@material-ui/core';
 import Cookies from 'js-cookie';
 
-import Response from './Response';
-import ResponseInstance from './ResponseInstance';
 import { DefaultApi, InlineObject } from './axios-client/api';
-import Bar from './Bar';
+import ImageUploadButton from './ImageUploadButton'
 
 
 interface ThreadDialogPropsInterface {
@@ -44,6 +43,7 @@ class ThreadDialog extends React.Component<ThreadDialogPropsInterface, ThreadDia
     this.toggleAnonymous = this.toggleAnonymous.bind(this)
     this.handleChangeDisplayName = this.handleChangeDisplayName.bind(this)
     this.handleChangeComment = this.handleChangeComment.bind(this)
+    this.onUpload = this.onUpload.bind(this)
   }
   
   createThread() {
@@ -88,6 +88,12 @@ class ThreadDialog extends React.Component<ThreadDialogPropsInterface, ThreadDia
   handleChangeComment(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({comment: e.target.value});
   }
+  onUpload(url: string) {
+    let comment = this.state.comment
+    comment += "\n"+url
+
+    this.setState({comment: comment})
+  }
 
 
   render() {
@@ -126,6 +132,7 @@ class ThreadDialog extends React.Component<ThreadDialogPropsInterface, ThreadDia
               value={ this.state.comment }
               onChange={ this.handleChangeComment }
             />
+            <ImageUploadButton onUpload={ this.onUpload } />
           </DialogContent>
           <DialogActions>
             <Button onClick={ this.createThread } color="primary">

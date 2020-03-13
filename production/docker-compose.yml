@@ -27,6 +27,8 @@ services:
     links:
       - mysql
       - redis
+    volumes:
+      - ./media:/srv/app/media
 
   nginx:
     build:
@@ -36,3 +38,5 @@ services:
       - "8000:80"
     links:
       - app
+    volumes:
+      - ./media:/usr/share/nginx/html/api/media

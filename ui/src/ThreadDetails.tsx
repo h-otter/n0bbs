@@ -6,7 +6,6 @@ import {
   DialogActions,
   DialogContent,
   Button,
-  Typography,
  } from '@material-ui/core';
 import { RouteComponentProps } from "react-router-dom";
 import Push from "push.js"
@@ -17,6 +16,7 @@ import Response from './Response';
 import ResponseInstance from './ResponseInstance';
 import { DefaultApi, InlineResponse200Results } from './axios-client/api';
 import Bar from './Bar';
+import ImageUploadButton from './ImageUploadButton'
 
 
 interface ThreadDetailsPropsInterface extends RouteComponentProps<{ id: string }> {}
@@ -112,6 +112,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
+    this.onUpload = this.onUpload.bind(this)
 
     let baseurl = window.location.protocol+"//"+window.location.host
     new DefaultApi({ basePath: baseurl }).retrieveThread(this.props.match.params.id).then((res) => {
@@ -194,6 +195,12 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       this.sendResponse()
     }
   }
+  onUpload(url: string) {
+    let comment = this.state.comment
+    comment += "\n"+url
+
+    this.setState({comment: comment})
+  }
 
 
   render() {
@@ -248,6 +255,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                   onChange={ this.handleChangeComment }
                   onKeyDown={ this.handleKeyDown }
                 />
+                <ImageUploadButton onUpload={ this.onUpload } />
               </DialogContent>
               <DialogActions>
                 <Button onClick={ this.sendResponse } color="primary">
