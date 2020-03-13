@@ -8,7 +8,6 @@ import {
   Button,
  } from '@material-ui/core';
 import { RouteComponentProps } from "react-router-dom";
-import Push from "push.js"
 import * as emojione from 'emojione';
 
 import "./ThreadDetails.css";
@@ -90,14 +89,6 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
         this.setState({
           responses: this.initializeResponseInstance(responses, i),
         })
-
-        // TODO: 自分が送ったものの通知はいらない
-        Push.create("", {
-          body: data.message.comment,
-          onClick: function () {
-              window.focus();
-          }
-        });
 
         // TODO: ページのスクロールが最下部だったら以下を実行する
         // window.location.hash = "#r"+this.state.responses.length;

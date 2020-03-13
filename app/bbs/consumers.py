@@ -1,19 +1,10 @@
 import json
-from urllib.parse import urlparse
-import datetime
-import time
-from django.db import connection
-from django.db.utils import OperationalError
-from django.core import serializers
-from django.utils import timezone
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from bbs.models import Response, Thread, ReadLog
+from bbs.models import Response, ReadLog
 
 
-# TODO: コメントのレンダリング
-# r.markdown_rendered | safe | linebreaksbr
 class ThreadConsumer(AsyncWebsocketConsumer):
     groups = ['broadcast']
 
@@ -27,7 +18,7 @@ class ThreadConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['thread_id']
-        self.room_group_name = "thread_{}".format(self.room_name)
+        self.room_group_name = "thread-{}".format(self.room_name)
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -87,3 +78,43 @@ class ThreadConsumer(AsyncWebsocketConsumer):
                 'message': res
             }
         )
+        # TODO: send to ChannelConsumer, channelをDBから取るようにする
+        await self.channel_layer.group_send(
+            "channel--1",
+            {
+                'type': 'new_response',
+                'message': res
+            }
+        )
+
+
+class ChannelConsumer(AsyncWebsocketConsumer):
+    groups = ['broadcast']
+
+    async def connect(self):
+        # self.room_name = self.scope['url_route']['kwargs']['channel_id']
+        self.room_name = "-1"
+        self.room_group_name = "channel-{}".format(self.room_name)
+
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+        # await self.close()
+
+    async def new_response(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'new_response',
+            'message': event["message"]
+        }))
+        await self.markRead(self.room_name, self.scope["user"])
+
+    async def receive(self, text_data):
+        pass

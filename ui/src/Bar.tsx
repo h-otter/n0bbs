@@ -12,10 +12,12 @@ import {
   ListItem,
   ListItemText,
   Link,
+  Divider,
  } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
+import Push from "push.js"
 
 import ThreadDialog from './ThreadDialog'
 
@@ -51,6 +53,8 @@ interface BarThreadsStateInterface {
 }
 
 class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInterface> {
+  websocket: WebSocket;
+
   constructor(props: BarThreadsPropsInterface) {
     super(props);
 
@@ -61,6 +65,42 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
 
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
+
+    let url = ""
+    if (window.location.protocol === "https:") {
+      url = 'wss://';
+    } else {
+      url = 'ws://';
+    }
+    url += window.location.host+'/api/ws/channel/';
+    this.websocket = new WebSocket(url);
+    this.websocket.onclose = (e) => {
+      // TODO: 再接続処理！！！
+      // Push.create("websocket is closed, please reload", {
+      //   onClick: function () {
+      //       window.focus();
+      //   }
+      // });
+    };
+    this.websocket.onmessage = (e) => {
+      let data = JSON.parse(e.data)
+
+      switch (data.type) {
+      case "new_response":
+        Push.create("", {
+          body: data.message.thread_title + ": " + data.message.comment,
+          onClick: function () {
+              window.focus();
+          }
+        });
+
+        break;
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.websocket.close();
   }
 
   openDialog() {
@@ -102,6 +142,7 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
             <ListItem button component={ReactLink} to={ "/threads/" }>
               <ListItemText primary="All Threads" />
             </ListItem>
+            <Divider />
           </List>
         </Drawer>
 
