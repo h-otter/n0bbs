@@ -23,16 +23,17 @@ interface ThreadDetailsPropsInterface extends RouteComponentProps<{ id: string }
 
 interface ThreadDetailsStateInterface {
   responses: ResponseInstance[];
-  websocket: WebSocket;
-
+  
   isOpenDialog: boolean;
   displayName: string;
   comment: string;
-
+  
   thread: InlineResponse200Results;
 }
 
 class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadDetailsStateInterface> {
+  websocket: WebSocket;
+
   constructor(props: ThreadDetailsPropsInterface) {
     super(props);
 
@@ -43,21 +44,21 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       url = 'ws://';
     }
     url += window.location.host+'/api/ws/thread/'+this.props.match.params.id;
-
+    
     this.state = {
       responses: [],
-      websocket: new WebSocket(url),
-
+      
       isOpenDialog: false,
       displayName: "n0nameさん",
       comment: "",
-
+      
       thread: {
         title: "",
       },
     };
-
-    this.state.websocket.onclose = (e) => {
+    
+    this.websocket = new WebSocket(url);
+    this.websocket.onclose = (e) => {
       // TODO: thread title
       // Push.create("websocket is closed, please reload", {
       //   onClick: function () {
@@ -65,7 +66,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       //   }
       // });
     };
-    this.state.websocket.onmessage = (e) => {
+    this.websocket.onmessage = (e) => {
       let data = JSON.parse(e.data)
 
       let responses: ResponseInstance[] = []
@@ -121,11 +122,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
   }
 
   componentWillUnmount() {
-    this.state.websocket.close();
+    this.websocket.close();
   }
 
   sendResponse() {
-    this.state.websocket.send(JSON.stringify({
+    this.websocket.send(JSON.stringify({
       'type': 'new_response',
       'message': {
         'display_name': this.state.displayName,
