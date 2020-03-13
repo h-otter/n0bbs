@@ -82,6 +82,7 @@ class Response(models.Model):
 
     def get_dict(self):
         return {
+            "thread_title": self.thread.title,
             "responded_by": self.masked_user() if self.thread.anonymous else str(self.responded_by),
             "responded_at": str(localtime(self.responded_at)),
             "display_name": self.display_name,
