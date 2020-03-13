@@ -22,11 +22,12 @@ from django.contrib.staticfiles.urls import static
 from rest_framework import routers
 
 from bbs.views import ThreadViewSet
-# from bbs.views import BoardViewSet
+from bbs.views import ImageViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'threads', ThreadViewSet)
+router.register(r'images', ImageViewSet)
 # router.register(r'boards', BoardViewSet)
 
 

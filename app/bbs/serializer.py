@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from bbs.models import Thread, Response
+from bbs.models import Thread, Response, Image
 
 
 class ResponseSerializer(serializers.ModelSerializer):
@@ -46,3 +46,19 @@ class ThreadSerializer(serializers.ModelSerializer):
             responses.append(Response.objects.create(thread=item, responded_by=user, **r))
 
         return item
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ['image', 'author', 'created_at']
+        read_only_fields = ['author', 'created_at']
+
+
+# class BoardSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Board
+#         fields = (
+#             'name', 
+#             'is_public', 
+#         )

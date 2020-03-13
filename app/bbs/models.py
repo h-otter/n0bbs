@@ -37,7 +37,7 @@ def get_upload_to(self, filename):
 
 class Image(models.Model):
     image = models.ImageField(upload_to=get_upload_to, null=False)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(default=timezone.now, null=False)
 
     def __str__(self):
