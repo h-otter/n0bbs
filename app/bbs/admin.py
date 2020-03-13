@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from bbs.models import Thread, Response, ReadLog
+from bbs.models import Thread, Response, Image
 
 
 class ResponseInline(admin.StackedInline):
@@ -14,6 +14,4 @@ class ThreadAdmin(admin.ModelAdmin):
 
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(Response)
-
-# TODO: あとで消す
-admin.site.register(ReadLog)
+admin.site.register(Image)

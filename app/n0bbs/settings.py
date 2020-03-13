@@ -185,6 +185,10 @@ REST_FRAMEWORK = {
 }
 
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/api/media/'
+
+
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,

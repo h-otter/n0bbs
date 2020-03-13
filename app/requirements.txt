@@ -7,5 +7,6 @@ mysqlclient
 markdown
 social-auth-app-django
 pyyaml
+Pillow
 uritemplate
 ipython

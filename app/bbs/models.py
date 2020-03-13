@@ -1,6 +1,8 @@
+import os
+import uuid
 import hashlib
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.timezone import localtime
@@ -11,11 +13,46 @@ from django.contrib.auth.models import User
 from bbs.slack import notify
 
 
+# class BoardRelation(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="boards")
+#     board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="members")
+
+#     # JOINED, MUTED, INVITED
+
+
+# class Board(models.Model):
+#     name = models.CharField("掲示板名", max_length=16, unique=True, null=False)
+#     is_public = models.BooleanField(default=True, null=False)
+
+#     def __str__(self):
+#         return self.name
+
+
+def get_upload_to(self, filename):
+    name = str(uuid.uuid4())
+    extension = os.path.splitext(filename)[-1]
+
+    return os.path.join('images/', name + extension)
+
+
+class Image(models.Model):
+    image = models.ImageField(upload_to=get_upload_to, null=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(default=timezone.now, null=False)
+
+    def __str__(self):
+        return self.image.name
+
+
+@receiver(post_delete, sender=Image)
+def delete_file(sender, instance, **kwargs):
+    instance.image.delete(False)
+
+
 class Thread(models.Model):
     # 有効なスレッドの中ではユニークのほうが良さそう
     title = models.CharField("スレタイ", max_length=255, unique=True, null=False)
     anonymous = models.BooleanField("匿名スレ", default=False)
-
 
     def __str__(self):
         return self.title
