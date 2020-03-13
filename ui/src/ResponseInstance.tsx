@@ -6,6 +6,7 @@ interface ResponseInstance {
 
   referenced?: number[];
   parents?: number[];
+  images?: string[];
 }
 
 export default ResponseInstance;
