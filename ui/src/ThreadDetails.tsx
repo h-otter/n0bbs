@@ -166,7 +166,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       }
     })
 
-    let r = responses[i].comment.match(/http[s]?:\/\/[^\s\r\n]*\.(jpg|JPG|gif|GIF|png|PNG|swf|SWF|css|CSS|js|JS|inc|INC|ico|ICO)/g)
+    let r = responses[i].comment.match(/http[s]?:\/\/[^\s\r\n]*\.(jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG|webp)/g)
     if (r !== null) {
       responses[i].images = r
     }
