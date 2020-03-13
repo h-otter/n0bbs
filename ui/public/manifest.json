@@ -1,5 +1,6 @@
 {
   "name": "n0bbs",
+  "short_name": "n0bbs",
   "theme_color": "#009688",
   "background_color": "#000000",
   "display": "standalone",
