@@ -111,6 +111,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
     this.handleChangeComment = this.handleChangeComment.bind(this)
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
 
     let baseurl = window.location.protocol+"//"+window.location.host
     new DefaultApi({ basePath: baseurl }).retrieveThread(this.props.match.params.id).then((res) => {
@@ -188,6 +189,11 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
   closeDialog() {
     this.setState({isOpenDialog: false});
   }
+  handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.keyCode === 13 && e.ctrlKey) {
+      this.sendResponse()
+    }
+  }
 
 
   render() {
@@ -240,6 +246,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                   margin="dense"
                   value={ this.state.comment }
                   onChange={ this.handleChangeComment }
+                  onKeyDown={ this.handleKeyDown }
                 />
               </DialogContent>
               <DialogActions>
