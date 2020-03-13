@@ -1,0 +1,26 @@
+{
+  "name": "n0bbs",
+  "theme_color": "#009688",
+  "background_color": "#000000",
+  "display": "standalone",
+  "Scope": "/",
+  "start_url": "/threads",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 48x48 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}
