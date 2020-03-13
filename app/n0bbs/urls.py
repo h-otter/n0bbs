@@ -19,12 +19,13 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from rest_framework import routers
 
-from bbs.views import ThreadViewSet, BoardViewSet
+from bbs.views import ThreadViewSet
+# from bbs.views import BoardViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'threads', ThreadViewSet)
-router.register(r'boards', BoardViewSet)
+# router.register(r'boards', BoardViewSet)
 
 
 urlpatterns = [
