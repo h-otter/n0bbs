@@ -14,7 +14,6 @@ import "./ThreadDetails.css";
 import Response from './Response';
 import ResponseInstance from './ResponseInstance';
 import { DefaultApi, InlineResponse200Results } from './axios-client/api';
-import Bar from './Bar';
 import ImageUploadButton from './ImageUploadButton'
 
 
@@ -202,7 +201,6 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
   render() {
     return (
       <div className="thread-details">
-        <Bar>
           <div>
             <Container id="responses" maxWidth="xl">
               <div>
@@ -260,7 +258,6 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
               </DialogActions>
             </Dialog>
           </div>
-        </Bar>
       </div>
     );
   }

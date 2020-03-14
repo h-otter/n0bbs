@@ -9,7 +9,6 @@ import {
  } from '@material-ui/core';
 
 import { DefaultApi, InlineResponse200Results } from './axios-client/api';
-import Bar from './Bar';
 
 
 
@@ -36,24 +35,22 @@ class ThreadList extends React.Component<ThreadListPropsInterface, ThreadListSta
   render() {
     return (
       <div className="thread-list">
-        <Bar>
-          <Container maxWidth="xl">
-            <List>
-              { this.state.threads?.map((t: InlineResponse200Results) => (
-                <ListItem key={ "t"+t.id } button component={Link} to={ "/threads/"+t.id } style={{ paddingBottom: 0, paddingTop: 0 }}>
-                  <ListItemText
-                    primary={ t.title }
-                    secondary={ t.responses_count !== undefined ? "" + t.responses_count : "0" }
-                    secondaryTypographyProps={{style: {fontSize: "0.75rem"}}}
-                  />
-                  { t.read_responses_count !== undefined && t.responses_count !== undefined && t.responses_count - t.read_responses_count > 0 && 
-                    <Chip label={ ""+(t.responses_count - t.read_responses_count) } />
-                  }
-                </ListItem>
-              ))}
-            </List>
-          </Container>
-        </Bar>
+        <Container maxWidth="xl">
+          <List>
+            { this.state.threads?.map((t: InlineResponse200Results) => (
+              <ListItem key={ "t"+t.id } button component={Link} to={ "/threads/"+t.id } style={{ paddingBottom: 0, paddingTop: 0 }}>
+                <ListItemText
+                  primary={ t.title }
+                  secondary={ t.responses_count !== undefined ? "" + t.responses_count : "0" }
+                  secondaryTypographyProps={{style: {fontSize: "0.75rem"}}}
+                />
+                { t.read_responses_count !== undefined && t.responses_count !== undefined && t.responses_count - t.read_responses_count > 0 && 
+                  <Chip label={ ""+(t.responses_count - t.read_responses_count) } />
+                }
+              </ListItem>
+            ))}
+          </List>
+        </Container>
       </div>
     );
   }
