@@ -55,17 +55,7 @@ interface BarThreadsStateInterface {
 class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInterface> {
   websocket: WebSocket;
 
-  constructor(props: BarThreadsPropsInterface) {
-    super(props);
-
-    this.state = {
-      drawer: false,
-      dialog: false,
-    };
-
-    this.openDialog = this.openDialog.bind(this)
-    this.closeDialog = this.closeDialog.bind(this)
-
+  connect = () => {
     let url = ""
     if (window.location.protocol === "https:") {
       url = 'wss://';
@@ -75,12 +65,11 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
     url += window.location.host+'/api/ws/channel/';
     this.websocket = new WebSocket(url);
     this.websocket.onclose = (e) => {
-      // TODO: 再接続処理！！！
-      // Push.create("websocket is closed, please reload", {
-      //   onClick: function () {
-      //       window.focus();
-      //   }
-      // });
+      console.log(e)
+    };
+    this.websocket.onerror = (e) => {
+      console.log(e)
+      setTimeout(this.connect, 60*1000); // reconnect after 1 min
     };
     this.websocket.onmessage = (e) => {
       let data = JSON.parse(e.data)
@@ -97,6 +86,21 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
         break;
       }
     }
+
+    return this.websocket;
+  }
+
+  constructor(props: BarThreadsPropsInterface) {
+    super(props);
+
+    this.state = {
+      drawer: false,
+      dialog: false,
+    };
+    this.websocket = this.connect()
+
+    this.openDialog = this.openDialog.bind(this)
+    this.closeDialog = this.closeDialog.bind(this)
   }
 
   componentWillUnmount() {

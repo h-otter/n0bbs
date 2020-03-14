@@ -32,9 +32,7 @@ interface ThreadDetailsStateInterface {
 class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadDetailsStateInterface> {
   websocket: WebSocket;
 
-  constructor(props: ThreadDetailsPropsInterface) {
-    super(props);
-
+  connect = () => {
     let url = ""
     if (window.location.protocol === "https:") {
       url = 'wss://';
@@ -42,27 +40,14 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
       url = 'ws://';
     }
     url += window.location.host+'/api/ws/thread/'+this.props.match.params.id;
-    
-    this.state = {
-      responses: [],
-      
-      isOpenDialog: false,
-      displayName: "n0nameさん",
-      comment: "",
-      
-      thread: {
-        title: "",
-      },
-    };
-    
+
     this.websocket = new WebSocket(url);
     this.websocket.onclose = (e) => {
-      // TODO: thread title
-      // Push.create("websocket is closed, please reload", {
-      //   onClick: function () {
-      //       window.focus();
-      //   }
-      // });
+      console.log(e)
+    };
+    this.websocket.onerror = (e) => {
+      console.log(e)
+      setTimeout(this.connect, 60*1000); // reconnect after 1 min
     };
     this.websocket.onmessage = (e) => {
       let data = JSON.parse(e.data)
@@ -95,6 +80,26 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
         break;
       }
     }
+
+    return this.websocket
+  }
+
+  constructor(props: ThreadDetailsPropsInterface) {
+    super(props);
+
+    this.state = {
+      responses: [],
+      
+      isOpenDialog: false,
+      displayName: "n0nameさん",
+      comment: "",
+      
+      thread: {
+        title: "",
+      },
+    };
+    this.websocket = this.connect();
+    
 
     this.sendResponse = this.sendResponse.bind(this)
     this.onReply = this.onReply.bind(this)
@@ -201,63 +206,63 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
   render() {
     return (
       <div className="thread-details">
-          <div>
-            <Container id="responses" maxWidth="xl">
-              <div>
-                <h1>{ this.state.thread.title }</h1>
-              </div>
-              { this.state.responses.map((r, i) => (
-                (r.parents === undefined || r.parents?.length === 0) && <Response
-                  key={ i }
-                  i={ i }
-                  responses={ this.state.responses }
-                  nested={ 0 }
-                  onReply={ this.onReply }
-                />
-              ))}
-              <Button
-                variant="outlined"
-                onClick={ this.openDialog }
+        <div>
+          <Container id="responses" maxWidth="xl">
+            <div>
+              <h1>{ this.state.thread.title }</h1>
+            </div>
+            { this.state.responses.map((r, i) => (
+              (r.parents === undefined || r.parents?.length === 0) && <Response
+                key={ i }
+                i={ i }
+                responses={ this.state.responses }
+                nested={ 0 }
+                onReply={ this.onReply }
+              />
+            ))}
+            <Button
+              variant="outlined"
+              onClick={ this.openDialog }
+              fullWidth
+            >
+              Reply
+            </Button>
+          </Container>
+
+          <Dialog open={ this.state.isOpenDialog } onClose={ this.closeDialog } aria-labelledby="form-dialog-title">
+            {/* <DialogTitle id="form-dialog-title">Reply</DialogTitle> */}
+            <DialogContent>
+              <TextField
+                id="outlined-multiline-flexible"
+                label="Display Name"
                 fullWidth
-              >
+                variant="outlined"
+                margin="dense"
+                value={ this.state.displayName }
+                onChange={ this.handleChangeDisplayName }
+              />
+              <TextField
+                id="outlined-multiline-flexible"
+                label="Comment"
+                autoFocus
+                fullWidth
+                multiline
+                rowsMax="10"
+                variant="outlined"
+                margin="dense"
+                value={ this.state.comment }
+                onChange={ this.handleChangeComment }
+                onKeyDown={ this.handleKeyDown }
+              />
+              <ImageUploadButton onUpload={ this.onUpload } />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={ this.sendResponse } color="primary">
                 Reply
               </Button>
-            </Container>
-
-            <Dialog open={ this.state.isOpenDialog } onClose={ this.closeDialog } aria-labelledby="form-dialog-title">
-              {/* <DialogTitle id="form-dialog-title">Reply</DialogTitle> */}
-              <DialogContent>
-                <TextField
-                  id="outlined-multiline-flexible"
-                  label="Display Name"
-                  fullWidth
-                  variant="outlined"
-                  margin="dense"
-                  value={ this.state.displayName }
-                  onChange={ this.handleChangeDisplayName }
-                />
-                <TextField
-                  id="outlined-multiline-flexible"
-                  label="Comment"
-                  autoFocus
-                  fullWidth
-                  multiline
-                  rowsMax="10"
-                  variant="outlined"
-                  margin="dense"
-                  value={ this.state.comment }
-                  onChange={ this.handleChangeComment }
-                  onKeyDown={ this.handleKeyDown }
-                />
-                <ImageUploadButton onUpload={ this.onUpload } />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={ this.sendResponse } color="primary">
-                  Reply
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
+            </DialogActions>
+          </Dialog>
+        </div>
       </div>
     );
   }
