@@ -27,6 +27,9 @@ class ChannelRelation(models.Model):
     CHANNEL_RELATION_STATES = (('INVITED', 'INVITED'), ('JOINED', 'JOINED'), ('MUTED', 'MUTED'))
     state = models.CharField(max_length=8, choices=CHANNEL_RELATION_STATES, default='INVITED', null=False)
 
+    class Meta:
+        unique_together = ('user', 'channel')
+
 
 def get_upload_to(self, filename):
     name = str(uuid.uuid4())

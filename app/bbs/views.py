@@ -2,15 +2,18 @@ from django.db.models import Max, Count, IntegerField, Case, When, Value
 from django.contrib.auth.models import User
 from rest_framework import mixins
 from rest_framework import permissions
+from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
-from rest_framework.response import Response
+from rest_framework.response import Response as RestResponse
 from rest_framework.parsers import MultiPartParser
 
-from bbs.models import Thread, Response, Image
-from bbs.models import Channel
-from bbs.serializer import ThreadSerializer, ResponseSerializer, ImageSerializer
+from bbs.models import Thread, Image
+from bbs.models import Channel, ChannelRelation
+from bbs.serializer import ThreadSerializer, ImageSerializer
 from bbs.serializer import UserSerializer
 from bbs.serializer import ChannelSerializer
+from bbs.serializer import ChannelRelationSerializer
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
@@ -34,6 +37,44 @@ class ChannelViewSet(mixins.CreateModelMixin,
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    # invite
+    @action(detail=True, methods=['post'])
+    def invite(self, request, pk=None):
+        data = ChannelRelationSerializer(request.data, many=True)
+
+        if data.is_valid():
+            for u in data:
+                ChannelRelation.objects.create(user_id=u.user, channel_id=pk)
+
+            return RestResponse({'status': 'users are invited'})
+        else:
+            return RestResponse(data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # join
+    @action(detail=True, methods=['post'])
+    def join(self, request, pk=None):
+        user = self.request.user
+        r = ChannelRelation.objects.get(user=user, channel_id=pk)
+        if not r:
+            return RestResponse({'status': 'invite you by channel members before join'}, status=status.HTTP_400_BAD_REQUEST)
+
+        r.state = "JOINED"
+        r.save()
+
+        return RestResponse({'status': 'you joined!!'})
+
+    @action(detail=True, methods=['post'])
+    def mute(self, request, pk=None):
+        user = self.request.user
+        r = ChannelRelation.objects.get(user=user, channel_id=pk)
+        if not r:
+            return RestResponse({'status': 'invite you by channel members before mute'}, status=status.HTTP_400_BAD_REQUEST)
+
+        r.state = "MUTED"
+        r.save()
+
+        return RestResponse({'status': 'you have muted this channel'})
 
 
 class ThreadViewSet(mixins.CreateModelMixin,

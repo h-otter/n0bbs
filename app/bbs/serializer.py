@@ -19,7 +19,7 @@ class ChannelRelationSerializer(serializers.ModelSerializer):
             'user',
             'state',
         )
-        read_only_fields = ('user', 'state')
+        read_only_fields = ('state', )
 
 
 class ChannelSerializer(serializers.ModelSerializer):
