@@ -30,7 +30,7 @@ class ChannelViewSet(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      mixins.UpdateModelMixin,
                      GenericViewSet):
-    queryset = Channel.objects.all()
+    queryset = Channel.objects.all().order_by('name')
 
     serializer_class = ChannelSerializer
     permission_classes = [permissions.IsAuthenticated]
