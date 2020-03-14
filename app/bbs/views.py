@@ -7,17 +7,33 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 
 from bbs.models import Thread, Response, Image
+from bbs.models import Channel
 from bbs.serializer import ThreadSerializer, ResponseSerializer, ImageSerializer
 from bbs.serializer import UserSerializer
+from bbs.serializer import ChannelSerializer
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    GenericViewSet):
+                  mixins.ListModelMixin,
+                  GenericViewSet):
     queryset = User.objects.all()
 
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class ChannelViewSet(mixins.CreateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.UpdateModelMixin,
+                     GenericViewSet):
+    queryset = Channel.objects.all()
+
+    serializer_class = ChannelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class ThreadViewSet(mixins.CreateModelMixin,

@@ -13,19 +13,19 @@ from django.contrib.auth.models import User
 from bbs.slack import notify
 
 
-# class BoardRelation(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="boards")
-#     board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="members")
+class Channel(models.Model):
+    name = models.CharField(max_length=32, unique=True, null=False)
 
-#     # JOINED, MUTED, INVITED
+    def __str__(self):
+        return self.name
 
 
-# class Board(models.Model):
-#     name = models.CharField("掲示板名", max_length=16, unique=True, null=False)
-#     is_public = models.BooleanField(default=True, null=False)
+class ChannelRelation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="channels", null=False)
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE, related_name="users", null=False)
 
-#     def __str__(self):
-#         return self.name
+    CHANNEL_RELATION_STATES = (('INVITED', 'INVITED'), ('JOINED', 'JOINED'), ('MUTED', 'MUTED'))
+    state = models.CharField(max_length=8, choices=CHANNEL_RELATION_STATES, default='INVITED', null=False)
 
 
 def get_upload_to(self, filename):

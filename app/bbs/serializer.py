@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from bbs.models import Thread, Response, Image
+from bbs.models import Thread, Response, Image, Channel
+from bbs.models import ChannelRelation
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,6 +10,35 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'last_login')
         read_only_fields = ('id', 'username', 'last_login')
+
+
+class ChannelRelationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChannelRelation
+        fields = (
+            'user',
+            'state',
+        )
+        read_only_fields = ('user', 'state')
+
+
+class ChannelSerializer(serializers.ModelSerializer):
+    users = ChannelRelationSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Channel
+        fields = (
+            'id',
+            'name',
+            'users',
+        )
+
+    def create(self, validated_data):
+        user = validated_data.pop('user')
+        item = Channel.objects.create(**validated_data)
+        ChannelRelation.objects.create(user=user, channel=item)
+
+        return item
 
 
 class ResponseSerializer(serializers.ModelSerializer):
