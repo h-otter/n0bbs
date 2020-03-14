@@ -19,7 +19,14 @@ class ChannelRelationSerializer(serializers.ModelSerializer):
             'user',
             'state',
         )
-        read_only_fields = ('state', )
+        read_only_fields = ('user', 'state')
+
+
+class InviteToChannelSerializer(serializers.Serializer):
+    users = serializers.ListField(
+        child=serializers.IntegerField(),
+        required=True,
+    )
 
 
 class ChannelSerializer(serializers.ModelSerializer):

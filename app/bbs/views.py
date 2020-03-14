@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework import status
+from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response as RestResponse
@@ -14,6 +15,7 @@ from bbs.serializer import ThreadSerializer, ImageSerializer
 from bbs.serializer import UserSerializer
 from bbs.serializer import ChannelSerializer
 from bbs.serializer import ChannelRelationSerializer
+from bbs.serializer import InviteToChannelSerializer
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
@@ -38,21 +40,19 @@ class ChannelViewSet(mixins.CreateModelMixin,
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    # invite
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], serializer_class=InviteToChannelSerializer)
     def invite(self, request, pk=None):
-        data = ChannelRelationSerializer(request.data, many=True)
+        data = InviteToChannelSerializer(data=request.data)
 
         if data.is_valid():
-            for u in data:
-                ChannelRelation.objects.create(user_id=u.user, channel_id=pk)
+            for u in data.validated_data['users']:
+                ChannelRelation.objects.create(user_id=u, channel_id=pk)
 
             return RestResponse({'status': 'users are invited'})
         else:
             return RestResponse(data.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # join
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], serializer_class=serializers.Serializer)
     def join(self, request, pk=None):
         user = self.request.user
         r = ChannelRelation.objects.get(user=user, channel_id=pk)
@@ -64,7 +64,7 @@ class ChannelViewSet(mixins.CreateModelMixin,
 
         return RestResponse({'status': 'you joined!!'})
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], serializer_class=serializers.Serializer)
     def mute(self, request, pk=None):
         user = self.request.user
         r = ChannelRelation.objects.get(user=user, channel_id=pk)

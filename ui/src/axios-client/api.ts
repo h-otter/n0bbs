@@ -58,6 +58,12 @@ export interface InlineObject {
     anonymous?: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof InlineObject
+     */
+    channel?: number | null;
+    /**
+     * 
      * @type {Array<ApiThreadsResponses>}
      * @memberof InlineObject
      */
@@ -75,6 +81,58 @@ export interface InlineObject1 {
      * @memberof InlineObject1
      */
     image: any;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject2
+ */
+export interface InlineObject2 {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject2
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject3
+ */
+export interface InlineObject3 {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject3
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject4
+ */
+export interface InlineObject4 {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject4
+     */
+    name?: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject5
+ */
+export interface InlineObject5 {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof InlineObject5
+     */
+    users: Array<number>;
 }
 /**
  * 
@@ -166,6 +224,161 @@ export interface InlineResponse2001Results {
 /**
  * 
  * @export
+ * @interface InlineResponse2002
+ */
+export interface InlineResponse2002 {
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse2002
+     */
+    count?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2002
+     */
+    next?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2002
+     */
+    previous?: string | null;
+    /**
+     * 
+     * @type {Array<InlineResponse2002Results>}
+     * @memberof InlineResponse2002
+     */
+    results?: Array<InlineResponse2002Results>;
+}
+/**
+ * 
+ * @export
+ * @interface InlineResponse2002Results
+ */
+export interface InlineResponse2002Results {
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse2002Results
+     */
+    id?: number;
+    /**
+     * この項目は必須です。半角アルファベット、半角数字、@/./+/-/_ で150文字以下にしてください。
+     * @type {string}
+     * @memberof InlineResponse2002Results
+     */
+    username?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2002Results
+     */
+    last_login?: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineResponse2003
+ */
+export interface InlineResponse2003 {
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse2003
+     */
+    count?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2003
+     */
+    next?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2003
+     */
+    previous?: string | null;
+    /**
+     * 
+     * @type {Array<InlineResponse2003Results>}
+     * @memberof InlineResponse2003
+     */
+    results?: Array<InlineResponse2003Results>;
+}
+/**
+ * 
+ * @export
+ * @interface InlineResponse2003Results
+ */
+export interface InlineResponse2003Results {
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse2003Results
+     */
+    id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2003Results
+     */
+    name: string;
+    /**
+     * 
+     * @type {Array<InlineResponse2003Users>}
+     * @memberof InlineResponse2003Results
+     */
+    users?: Array<InlineResponse2003Users>;
+}
+/**
+ * 
+ * @export
+ * @interface InlineResponse2003Users
+ */
+export interface InlineResponse2003Users {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2003Users
+     */
+    user?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2003Users
+     */
+    state?: InlineResponse2003UsersStateEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum InlineResponse2003UsersStateEnum {
+    INVITED = 'INVITED',
+    JOINED = 'JOINED',
+    MUTED = 'MUTED'
+}
+
+/**
+ * 
+ * @export
+ * @interface InlineResponse2004
+ */
+export interface InlineResponse2004 {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof InlineResponse2004
+     */
+    users: Array<number>;
+}
+/**
+ * 
+ * @export
  * @interface InlineResponse200Results
  */
 export interface InlineResponse200Results {
@@ -192,6 +405,12 @@ export interface InlineResponse200Results {
      * @type {number}
      * @memberof InlineResponse200Results
      */
+    channel?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse200Results
+     */
     responses_count?: number;
     /**
      * 
@@ -213,6 +432,40 @@ export interface InlineResponse200Results {
  */
 export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {InlineObject2} [inlineObject2] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createChannel(inlineObject2?: InlineObject2, options: any = {}): RequestArgs {
+            const localVarPath = `/api/channels/`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof inlineObject2 !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(inlineObject2 !== undefined ? inlineObject2 : {}) : (inlineObject2 || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {any} image 
@@ -283,6 +536,125 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             const needsSerialization = (typeof inlineObject !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
             localVarRequestOptions.data =  needsSerialization ? JSON.stringify(inlineObject !== undefined ? inlineObject : {}) : (inlineObject || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject5} [inlineObject5] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        inviteChannel(id: string, inlineObject5?: InlineObject5, options: any = {}): RequestArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling inviteChannel.');
+            }
+            const localVarPath = `/api/channels/{id}/invite/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof inlineObject5 !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(inlineObject5 !== undefined ? inlineObject5 : {}) : (inlineObject5 || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {object} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        joinChannel(id: string, body?: object, options: any = {}): RequestArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling joinChannel.');
+            }
+            const localVarPath = `/api/channels/{id}/join/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} [limit] Number of results to return per page.
+         * @param {number} [offset] The initial index from which to return the results.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listChannels(limit?: number, offset?: number, options: any = {}): RequestArgs {
+            const localVarPath = `/api/channels/`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: globalImportUrl.format(localVarUrlObj),
@@ -369,6 +741,160 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {number} [limit] Number of results to return per page.
+         * @param {number} [offset] The initial index from which to return the results.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUsers(limit?: number, offset?: number, options: any = {}): RequestArgs {
+            const localVarPath = `/api/users/`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {object} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        muteChannel(id: string, body?: object, options: any = {}): RequestArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling muteChannel.');
+            }
+            const localVarPath = `/api/channels/{id}/mute/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject4} [inlineObject4] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        partialUpdateChannel(id: string, inlineObject4?: InlineObject4, options: any = {}): RequestArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling partialUpdateChannel.');
+            }
+            const localVarPath = `/api/channels/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof inlineObject4 !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(inlineObject4 !== undefined ? inlineObject4 : {}) : (inlineObject4 || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveChannel(id: string, options: any = {}): RequestArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling retrieveChannel.');
+            }
+            const localVarPath = `/api/channels/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} id A unique integer value identifying this thread.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -402,6 +928,81 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this ユーザー.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveUser(id: string, options: any = {}): RequestArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling retrieveUser.');
+            }
+            const localVarPath = `/api/users/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject3} [inlineObject3] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateChannel(id: string, inlineObject3?: InlineObject3, options: any = {}): RequestArgs {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateChannel.');
+            }
+            const localVarPath = `/api/channels/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof inlineObject3 !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(inlineObject3 !== undefined ? inlineObject3 : {}) : (inlineObject3 || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -411,6 +1012,19 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
  */
 export const DefaultApiFp = function(configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {InlineObject2} [inlineObject2] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createChannel(inlineObject2?: InlineObject2, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003Results> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).createChannel(inlineObject2, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
         /**
          * 
          * @param {any} image 
@@ -432,6 +1046,48 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         createThread(inlineObject?: InlineObject, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200Results> {
             const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).createThread(inlineObject, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject5} [inlineObject5] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        inviteChannel(id: string, inlineObject5?: InlineObject5, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).inviteChannel(id, inlineObject5, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {object} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        joinChannel(id: string, body?: object, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<object> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).joinChannel(id, body, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {number} [limit] Number of results to return per page.
+         * @param {number} [offset] The initial index from which to return the results.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listChannels(limit?: number, offset?: number, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).listChannels(limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -467,12 +1123,94 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [limit] Number of results to return per page.
+         * @param {number} [offset] The initial index from which to return the results.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUsers(limit?: number, offset?: number, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).listUsers(limit, offset, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {object} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        muteChannel(id: string, body?: object, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<object> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).muteChannel(id, body, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject4} [inlineObject4] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        partialUpdateChannel(id: string, inlineObject4?: InlineObject4, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003Results> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).partialUpdateChannel(id, inlineObject4, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveChannel(id: string, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003Results> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).retrieveChannel(id, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @param {string} id A unique integer value identifying this thread.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         retrieveThread(id: string, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200Results> {
             const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).retrieveThread(id, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this ユーザー.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveUser(id: string, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002Results> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).retrieveUser(id, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject3} [inlineObject3] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateChannel(id: string, inlineObject3?: InlineObject3, options?: any): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003Results> {
+            const localVarAxiosArgs = DefaultApiAxiosParamCreator(configuration).updateChannel(id, inlineObject3, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -487,6 +1225,15 @@ export const DefaultApiFp = function(configuration?: Configuration) {
  */
 export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
+        /**
+         * 
+         * @param {InlineObject2} [inlineObject2] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createChannel(inlineObject2?: InlineObject2, options?: any): AxiosPromise<InlineResponse2003Results> {
+            return DefaultApiFp(configuration).createChannel(inlineObject2, options)(axios, basePath);
+        },
         /**
          * 
          * @param {any} image 
@@ -504,6 +1251,36 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         createThread(inlineObject?: InlineObject, options?: any): AxiosPromise<InlineResponse200Results> {
             return DefaultApiFp(configuration).createThread(inlineObject, options)(axios, basePath);
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject5} [inlineObject5] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        inviteChannel(id: string, inlineObject5?: InlineObject5, options?: any): AxiosPromise<InlineResponse2004> {
+            return DefaultApiFp(configuration).inviteChannel(id, inlineObject5, options)(axios, basePath);
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {object} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        joinChannel(id: string, body?: object, options?: any): AxiosPromise<object> {
+            return DefaultApiFp(configuration).joinChannel(id, body, options)(axios, basePath);
+        },
+        /**
+         * 
+         * @param {number} [limit] Number of results to return per page.
+         * @param {number} [offset] The initial index from which to return the results.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listChannels(limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2003> {
+            return DefaultApiFp(configuration).listChannels(limit, offset, options)(axios, basePath);
         },
         /**
          * 
@@ -527,12 +1304,70 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {number} [limit] Number of results to return per page.
+         * @param {number} [offset] The initial index from which to return the results.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUsers(limit?: number, offset?: number, options?: any): AxiosPromise<InlineResponse2002> {
+            return DefaultApiFp(configuration).listUsers(limit, offset, options)(axios, basePath);
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {object} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        muteChannel(id: string, body?: object, options?: any): AxiosPromise<object> {
+            return DefaultApiFp(configuration).muteChannel(id, body, options)(axios, basePath);
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject4} [inlineObject4] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        partialUpdateChannel(id: string, inlineObject4?: InlineObject4, options?: any): AxiosPromise<InlineResponse2003Results> {
+            return DefaultApiFp(configuration).partialUpdateChannel(id, inlineObject4, options)(axios, basePath);
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveChannel(id: string, options?: any): AxiosPromise<InlineResponse2003Results> {
+            return DefaultApiFp(configuration).retrieveChannel(id, options)(axios, basePath);
+        },
+        /**
+         * 
          * @param {string} id A unique integer value identifying this thread.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         retrieveThread(id: string, options?: any): AxiosPromise<InlineResponse200Results> {
             return DefaultApiFp(configuration).retrieveThread(id, options)(axios, basePath);
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this ユーザー.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retrieveUser(id: string, options?: any): AxiosPromise<InlineResponse2002Results> {
+            return DefaultApiFp(configuration).retrieveUser(id, options)(axios, basePath);
+        },
+        /**
+         * 
+         * @param {string} id A unique integer value identifying this channel.
+         * @param {InlineObject3} [inlineObject3] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateChannel(id: string, inlineObject3?: InlineObject3, options?: any): AxiosPromise<InlineResponse2003Results> {
+            return DefaultApiFp(configuration).updateChannel(id, inlineObject3, options)(axios, basePath);
         },
     };
 };
@@ -544,6 +1379,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @param {InlineObject2} [inlineObject2] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public createChannel(inlineObject2?: InlineObject2, options?: any) {
+        return DefaultApiFp(this.configuration).createChannel(inlineObject2, options)(this.axios, this.basePath);
+    }
+
     /**
      * 
      * @param {any} image 
@@ -564,6 +1410,42 @@ export class DefaultApi extends BaseAPI {
      */
     public createThread(inlineObject?: InlineObject, options?: any) {
         return DefaultApiFp(this.configuration).createThread(inlineObject, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id A unique integer value identifying this channel.
+     * @param {InlineObject5} [inlineObject5] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public inviteChannel(id: string, inlineObject5?: InlineObject5, options?: any) {
+        return DefaultApiFp(this.configuration).inviteChannel(id, inlineObject5, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id A unique integer value identifying this channel.
+     * @param {object} [body] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public joinChannel(id: string, body?: object, options?: any) {
+        return DefaultApiFp(this.configuration).joinChannel(id, body, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {number} [limit] Number of results to return per page.
+     * @param {number} [offset] The initial index from which to return the results.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public listChannels(limit?: number, offset?: number, options?: any) {
+        return DefaultApiFp(this.configuration).listChannels(limit, offset, options)(this.axios, this.basePath);
     }
 
     /**
@@ -592,6 +1474,53 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @param {number} [limit] Number of results to return per page.
+     * @param {number} [offset] The initial index from which to return the results.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public listUsers(limit?: number, offset?: number, options?: any) {
+        return DefaultApiFp(this.configuration).listUsers(limit, offset, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id A unique integer value identifying this channel.
+     * @param {object} [body] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public muteChannel(id: string, body?: object, options?: any) {
+        return DefaultApiFp(this.configuration).muteChannel(id, body, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id A unique integer value identifying this channel.
+     * @param {InlineObject4} [inlineObject4] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public partialUpdateChannel(id: string, inlineObject4?: InlineObject4, options?: any) {
+        return DefaultApiFp(this.configuration).partialUpdateChannel(id, inlineObject4, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id A unique integer value identifying this channel.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public retrieveChannel(id: string, options?: any) {
+        return DefaultApiFp(this.configuration).retrieveChannel(id, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
      * @param {string} id A unique integer value identifying this thread.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -599,6 +1528,29 @@ export class DefaultApi extends BaseAPI {
      */
     public retrieveThread(id: string, options?: any) {
         return DefaultApiFp(this.configuration).retrieveThread(id, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id A unique integer value identifying this ユーザー.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public retrieveUser(id: string, options?: any) {
+        return DefaultApiFp(this.configuration).retrieveUser(id, options)(this.axios, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {string} id A unique integer value identifying this channel.
+     * @param {InlineObject3} [inlineObject3] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public updateChannel(id: string, inlineObject3?: InlineObject3, options?: any) {
+        return DefaultApiFp(this.configuration).updateChannel(id, inlineObject3, options)(this.axios, this.basePath);
     }
 
 }
