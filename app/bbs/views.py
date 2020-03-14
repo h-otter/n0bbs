@@ -1,4 +1,5 @@
 from django.db.models import Max, Count, IntegerField, Case, When, Value
+from django.contrib.auth.models import User
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
@@ -7,6 +8,16 @@ from rest_framework.parsers import MultiPartParser
 
 from bbs.models import Thread, Response, Image
 from bbs.serializer import ThreadSerializer, ResponseSerializer, ImageSerializer
+from bbs.serializer import UserSerializer
+
+
+class UserViewSet(mixins.RetrieveModelMixin,
+                    mixins.ListModelMixin,
+                    GenericViewSet):
+    queryset = User.objects.all()
+
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class ThreadViewSet(mixins.CreateModelMixin,

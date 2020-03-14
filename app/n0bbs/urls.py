@@ -23,11 +23,13 @@ from rest_framework import routers
 
 from bbs.views import ThreadViewSet
 from bbs.views import ImageViewSet
+from bbs.views import UserViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'threads', ThreadViewSet)
 router.register(r'images', ImageViewSet)
+router.register(r'users', UserViewSet)
 # router.register(r'boards', BoardViewSet)
 
 

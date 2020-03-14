@@ -1,6 +1,14 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from bbs.models import Thread, Response, Image
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'last_login')
+        read_only_fields = ('id', 'username', 'last_login')
 
 
 class ResponseSerializer(serializers.ModelSerializer):
