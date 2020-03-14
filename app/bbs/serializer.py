@@ -59,11 +59,12 @@ class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
         fields = (
-            'id', 
-            'title', 
-            'anonymous', 
-            'responses_count', 
-            'read_responses_count', 
+            'id',
+            'title',
+            'anonymous',
+            'channel',
+            'responses_count',
+            'read_responses_count',
             'last_responded_at',
             'responses',
         )
@@ -97,6 +98,6 @@ class ImageSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Board
 #         fields = (
-#             'name', 
-#             'is_public', 
+#             'name',
+#             'is_public',
 #         )

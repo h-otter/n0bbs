@@ -56,6 +56,7 @@ class Thread(models.Model):
     # 有効なスレッドの中ではユニークのほうが良さそう
     title = models.CharField("スレタイ", max_length=255, unique=True, null=False)
     anonymous = models.BooleanField("匿名スレ", default=False)
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE, related_name="threads", null=True, blank=False)
 
     def __str__(self):
         return self.title
