@@ -60,6 +60,7 @@ class ImageUploadButton extends React.Component<ImageUploadButtonPropsInterface,
           accept="image/*"
           style={{display: 'none'}}
           onChange={ this.uploadImage }
+          multiple
         />
         <label htmlFor="image-upload">
           <IconButton color="inherit" component="span">
