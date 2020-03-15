@@ -247,6 +247,7 @@ class ThreadDetails extends React.Component<ThreadDetailsPropsInterface, ThreadD
                 autoFocus
                 fullWidth
                 multiline
+                required
                 rowsMax="10"
                 variant="outlined"
                 margin="dense"
