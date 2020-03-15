@@ -35,7 +35,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
+"properties": {
                     "count": {
                       "type": "integer",
                       "example": 123
@@ -52,7 +52,7 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "properties": {
+"properties": {
                           "id": {
                             "type": "integer",
                             "readOnly": true
@@ -63,6 +63,14 @@
                           },
                           "anonymous": {
                             "type": "boolean"
+                          },
+                          "channel": {
+                            "type": "integer",
+                            "nullable": true
+                          },
+                          "channel_name": {
+                            "type": "string",
+                            "readOnly": true
                           },
                           "responses_count": {
                             "type": "integer",
@@ -100,7 +108,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
+"properties": {
                   "title": {
                     "type": "string",
                     "maxLength": 255
@@ -108,11 +116,15 @@
                   "anonymous": {
                     "type": "boolean"
                   },
+                  "channel": {
+                    "type": "integer",
+                    "nullable": true
+                  },
                   "responses": {
                     "type": "array",
                     "items": {
                       "type": "object",
-                      "properties": {
+"properties": {
                         "display_name": {
                           "type": "string",
                           "maxLength": 65
@@ -138,7 +150,7 @@
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
-                "properties": {
+"properties": {
                   "title": {
                     "type": "string",
                     "maxLength": 255
@@ -146,11 +158,15 @@
                   "anonymous": {
                     "type": "boolean"
                   },
+                  "channel": {
+                    "type": "integer",
+                    "nullable": true
+                  },
                   "responses": {
                     "type": "array",
                     "items": {
                       "type": "object",
-                      "properties": {
+"properties": {
                         "display_name": {
                           "type": "string",
                           "maxLength": 65
@@ -176,7 +192,7 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "properties": {
+"properties": {
                   "title": {
                     "type": "string",
                     "maxLength": 255
@@ -184,11 +200,15 @@
                   "anonymous": {
                     "type": "boolean"
                   },
+                  "channel": {
+                    "type": "integer",
+                    "nullable": true
+                  },
                   "responses": {
                     "type": "array",
                     "items": {
                       "type": "object",
-                      "properties": {
+"properties": {
                         "display_name": {
                           "type": "string",
                           "maxLength": 65
@@ -219,7 +239,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
+"properties": {
                     "id": {
                       "type": "integer",
                       "readOnly": true
@@ -230,6 +250,14 @@
                     },
                     "anonymous": {
                       "type": "boolean"
+                    },
+                    "channel": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "channel_name": {
+                      "type": "string",
+                      "readOnly": true
                     },
                     "responses_count": {
                       "type": "integer",
@@ -277,7 +305,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
+"properties": {
                     "id": {
                       "type": "integer",
                       "readOnly": true
@@ -288,6 +316,14 @@
                     },
                     "anonymous": {
                       "type": "boolean"
+                    },
+                    "channel": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "channel_name": {
+                      "type": "string",
+                      "readOnly": true
                     },
                     "responses_count": {
                       "type": "integer",
@@ -344,7 +380,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
+"properties": {
                     "count": {
                       "type": "integer",
                       "example": 123
@@ -361,7 +397,7 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "properties": {
+"properties": {
                           "image": {
                             "type": "string",
                             "format": "binary"
@@ -398,7 +434,7 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "properties": {
+"properties": {
                   "image": {
                     "type": "string",
                     "format": "binary"
@@ -417,7 +453,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
+"properties": {
                     "image": {
                       "type": "string",
                       "format": "binary"
@@ -435,6 +471,778 @@
                   "required": [
                     "image"
                   ]
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/users/": {
+      "get": {
+        "operationId": "listUsers",
+        "description": "",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "The initial index from which to return the results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 123
+                    },
+                    "next": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+"properties": {
+                          "id": {
+                            "type": "integer",
+                            "readOnly": true
+                          },
+                          "username": {
+                            "type": "string",
+                            "readOnly": true,
+                            "description": "\u3053\u306e\u9805\u76ee\u306f\u5fc5\u9808\u3067\u3059\u3002\u534a\u89d2\u30a2\u30eb\u30d5\u30a1\u30d9\u30c3\u30c8\u3001\u534a\u89d2\u6570\u5b57\u3001@/./+/-/_ \u3067150\u6587\u5b57\u4ee5\u4e0b\u306b\u3057\u3066\u304f\u3060\u3055\u3044\u3002"
+                          },
+                          "last_login": {
+                            "type": "string",
+                            "format": "date-time",
+                            "readOnly": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/users/{id}/": {
+      "get": {
+        "operationId": "retrieveUser",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "A unique integer value identifying this \u30e6\u30fc\u30b6\u30fc.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "username": {
+                      "type": "string",
+                      "readOnly": true,
+                      "description": "\u3053\u306e\u9805\u76ee\u306f\u5fc5\u9808\u3067\u3059\u3002\u534a\u89d2\u30a2\u30eb\u30d5\u30a1\u30d9\u30c3\u30c8\u3001\u534a\u89d2\u6570\u5b57\u3001@/./+/-/_ \u3067150\u6587\u5b57\u4ee5\u4e0b\u306b\u3057\u3066\u304f\u3060\u3055\u3044\u3002"
+                    },
+                    "last_login": {
+                      "type": "string",
+                      "format": "date-time",
+                      "readOnly": true
+                    }
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/channels/": {
+      "get": {
+        "operationId": "listChannels",
+        "description": "",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "The initial index from which to return the results.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 123
+                    },
+                    "next": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "previous": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+"properties": {
+                          "id": {
+                            "type": "integer",
+                            "readOnly": true
+                          },
+                          "name": {
+                            "type": "string",
+                            "maxLength": 32
+                          },
+                          "users": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+"properties": {
+                                "user": {
+                                  "type": "string",
+                                  "readOnly": true
+                                },
+                                "state": {
+                                  "enum": [
+                                    "INVITED",
+                                    "JOINED",
+                                    "MUTED"
+                                  ],
+                                  "readOnly": true
+                                }
+                              }
+                            },
+                            "readOnly": true
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "operationId": "createChannel",
+        "description": "",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+"properties": {
+                          "user": {
+                            "type": "string",
+                            "readOnly": true
+                          },
+                          "state": {
+                            "enum": [
+                              "INVITED",
+                              "JOINED",
+                              "MUTED"
+                            ],
+                            "readOnly": true
+                          }
+                        }
+                      },
+                      "readOnly": true
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/channels/{id}/": {
+      "get": {
+        "operationId": "retrieveChannel",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "A unique integer value identifying this channel.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+"properties": {
+                          "user": {
+                            "type": "string",
+                            "readOnly": true
+                          },
+                          "state": {
+                            "enum": [
+                              "INVITED",
+                              "JOINED",
+                              "MUTED"
+                            ],
+                            "readOnly": true
+                          }
+                        }
+                      },
+                      "readOnly": true
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateChannel",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "A unique integer value identifying this channel.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+"properties": {
+                          "user": {
+                            "type": "string",
+                            "readOnly": true
+                          },
+                          "state": {
+                            "enum": [
+                              "INVITED",
+                              "JOINED",
+                              "MUTED"
+                            ],
+                            "readOnly": true
+                          }
+                        }
+                      },
+                      "readOnly": true
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "operationId": "partial_updateChannel",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "A unique integer value identifying this channel.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                }
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                }
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 32
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {
+                    "id": {
+                      "type": "integer",
+                      "readOnly": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+"properties": {
+                          "user": {
+                            "type": "string",
+                            "readOnly": true
+                          },
+                          "state": {
+                            "enum": [
+                              "INVITED",
+                              "JOINED",
+                              "MUTED"
+                            ],
+                            "readOnly": true
+                          }
+                        }
+                      },
+                      "readOnly": true
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/channels/{id}/invite/": {
+      "post": {
+        "operationId": "inviteChannel",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "A unique integer value identifying this channel.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "users": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "required": [
+                  "users"
+                ]
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "users": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "required": [
+                  "users"
+                ]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+"properties": {
+                  "users": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "required": [
+                  "users"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "required": [
+                    "users"
+                  ]
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/channels/{id}/join/": {
+      "post": {
+        "operationId": "joinChannel",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "A unique integer value identifying this channel.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+"properties": {}
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+"properties": {}
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+"properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {}
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/channels/{id}/mute/": {
+      "post": {
+        "operationId": "muteChannel",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "A unique integer value identifying this channel.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+"properties": {}
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+"properties": {}
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+"properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+"properties": {}
                 }
               }
             },
