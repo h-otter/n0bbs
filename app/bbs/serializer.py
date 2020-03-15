@@ -56,6 +56,9 @@ class ResponseSerializer(serializers.ModelSerializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
+    # 非正規化
+    channel_name = serializers.SerializerMethodField(read_only=True)
+
     # archived = serializers.Boolean(read_only=True) # TODO: あとでロジックを考える #11
     responses_count = serializers.IntegerField(read_only=True)
     read_responses_count = serializers.IntegerField(read_only=True)
@@ -70,11 +73,15 @@ class ThreadSerializer(serializers.ModelSerializer):
             'title',
             'anonymous',
             'channel',
+            'channel_name',
             'responses_count',
             'read_responses_count',
             'last_responded_at',
             'responses',
         )
+
+    def get_channel_name(self, obj):
+        return str(obj.channel.name)
 
     def validate_responses(self, value):
         if len(value) != 1:

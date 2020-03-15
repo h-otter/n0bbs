@@ -89,9 +89,15 @@ class ThreadViewSet(mixins.CreateModelMixin,
     def get_queryset(self):
         user = self.request.user
 
-        return Thread.objects.annotate(
+        channels = self.request.query_params.get('channels', None)
+
+        if channels:
+            channel_ids = channels.split(",")
+        else:
+            channel_ids = User.objects.first().channels.filter(state="JOINED").values_list('channel_id')
+
+        return Thread.objects.prefetch_related('channel').filter(channel_id__in=channel_ids).annotate(
             responses_count=Count('responses', distinct=True),
-        ).annotate(
             read_responses_count=Max(Case(
                 When(read_log__user=user, then='read_log__response_count'),
                 default=Value(0),

@@ -11,15 +11,16 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListSubheader,
   Link,
   Divider,
  } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
-import Push from "push.js"
 
 import ThreadDialog from './ThreadDialog'
+import { DefaultApi, InlineResponse2003Results } from './axios-client/api';
 
 
 // https://material-ui.com/components/app-bar/#hide-app-bar
@@ -50,61 +51,28 @@ interface BarThreadsPropsInterface {
 interface BarThreadsStateInterface {
   drawer: boolean;
   dialog: boolean;
+  channels: InlineResponse2003Results[];
 }
 
 class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInterface> {
-  websocket: WebSocket;
-
-  connect = () => {
-    let url = ""
-    if (window.location.protocol === "https:") {
-      url = 'wss://';
-    } else {
-      url = 'ws://';
-    }
-    url += window.location.host+'/api/ws/channel/';
-    this.websocket = new WebSocket(url);
-    this.websocket.onclose = (e) => {
-      console.log(e)
-    };
-    this.websocket.onerror = (e) => {
-      console.log(e)
-      setTimeout(this.connect, 60*1000); // reconnect after 1 min
-    };
-    this.websocket.onmessage = (e) => {
-      let data = JSON.parse(e.data)
-
-      switch (data.type) {
-      case "new_response":
-        Push.create("", {
-          body: data.message.thread_title + ": " + data.message.comment,
-          onClick: function () {
-              window.focus();
-          }
-        });
-
-        break;
-      }
-    }
-
-    return this.websocket;
-  }
-
   constructor(props: BarThreadsPropsInterface) {
     super(props);
 
     this.state = {
       drawer: false,
       dialog: false,
+      channels: [],
     };
-    this.websocket = this.connect()
 
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
-  }
 
-  componentWillUnmount() {
-    this.websocket.close();
+    let baseurl = window.location.protocol+"//"+window.location.host
+    new DefaultApi({ basePath: baseurl }).listChannels().then((res) => {
+      if (res.data.results !== undefined) {
+        this.setState({channels: res.data.results});
+      }
+    })
   }
 
   openDialog() {
@@ -147,6 +115,34 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
               <ListItemText primary="All Threads" />
             </ListItem>
             <Divider />
+
+            <ListSubheader>
+              Channels
+            </ListSubheader>
+            { this.state.channels.map((c) => (
+              <ListItem button component={ReactLink} to={ "/channels/"+c.id+"/threads/" }>
+                <ListItemText primary={ "@"+c.name } />
+              </ListItem>
+            )) }
+
+            {/* <ListSubheader>
+              Muted Channels
+            </ListSubheader>
+            { this.state.channels.map((c) => (
+              <ListItem button component={ReactLink} to={ "/channels/"+c.id+"/threads/" }>
+                <ListItemText primary={ "@"+c.name } />
+              </ListItem>
+            )) } */}
+
+            {/* <ListSubheader>
+              Invited Channels
+            </ListSubheader>
+            { this.state.channels.map((c) => (
+              <ListItem button component={ReactLink} to={ "/channels/"+c.id+"/threads/" }>
+                <ListItemText primary={ "@"+c.name } />
+              </ListItem>
+            )) } */}
+            {/* TODO: add channel */}
           </List>
         </Drawer>
 

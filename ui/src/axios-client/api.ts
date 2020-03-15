@@ -408,6 +408,12 @@ export interface InlineResponse200Results {
     channel?: number | null;
     /**
      * 
+     * @type {string}
+     * @memberof InlineResponse200Results
+     */
+    channel_name?: string;
+    /**
+     * 
      * @type {number}
      * @memberof InlineResponse200Results
      */
