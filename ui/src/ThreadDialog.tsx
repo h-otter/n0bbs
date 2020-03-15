@@ -19,6 +19,9 @@ import ImageUploadButton from './ImageUploadButton'
 interface ThreadDialogPropsInterface {
   open: boolean;
   onClose: () => void;
+
+  channel: string;
+  channel_id: number;
 }
 
 interface ThreadDialogStateInterface extends InlineObject {
@@ -53,6 +56,7 @@ class ThreadDialog extends React.Component<ThreadDialogPropsInterface, ThreadDia
         display_name: this.state.displayName,
         comment: this.state.comment,
       }],
+      channel: this.props.channel_id,
     }
 
     console.log(this.state)
@@ -103,17 +107,25 @@ class ThreadDialog extends React.Component<ThreadDialogPropsInterface, ThreadDia
           <DialogTitle id="form-dialog-title">New Thread</DialogTitle>
           <DialogContent>
             <TextField
-              id="outlined-multiline-flexible"
               label="Title"
               fullWidth
+              required
               variant="outlined"
               margin="dense"
               value={ this.state.title }
               onChange={ this.handleChangeTitle }
             />
+            <TextField
+              label="Channel"
+              fullWidth
+              required
+              disabled
+              variant="outlined"
+              margin="dense"
+              value={ this.props.channel }
+            />
             <FormControlLabel control={<Switch value={ this.state.anonymous } onChange={ this.toggleAnonymous } />} label="Anonymous" />
             <TextField
-              id="outlined-multiline-flexible"
               label="Display Name"
               fullWidth
               variant="outlined"
@@ -122,10 +134,10 @@ class ThreadDialog extends React.Component<ThreadDialogPropsInterface, ThreadDia
               onChange={ this.handleChangeDisplayName }
             />
             <TextField
-              id="outlined-multiline-flexible"
               label="Comment"
               fullWidth
               multiline
+              required
               rowsMax="10"
               variant="outlined"
               margin="dense"

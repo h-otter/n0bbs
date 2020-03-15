@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link as ReactLink } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import {
   Slide,
   AppBar,
@@ -44,9 +45,7 @@ function HideOnScroll(props: HideOnScrollProps) {
 }
 
 
-interface BarThreadsPropsInterface {
-  children: React.ReactElement;
-}
+interface BarThreadsPropsInterface extends RouteComponentProps<{ channel_id?: string }> {}
 
 interface BarThreadsStateInterface {
   drawer: boolean;
@@ -55,6 +54,8 @@ interface BarThreadsStateInterface {
 }
 
 class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInterface> {
+  currentChannel?: InlineResponse2003Results;
+
   constructor(props: BarThreadsPropsInterface) {
     super(props);
 
@@ -66,13 +67,22 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
 
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
-
+    
     let baseurl = window.location.protocol+"//"+window.location.host
     new DefaultApi({ basePath: baseurl }).listChannels().then((res) => {
       if (res.data.results !== undefined) {
         this.setState({channels: res.data.results});
+        this.currentChannel = this.getCurrentChannel(res.data.results, this.props.match.params.channel_id)
       }
     })
+
+  }
+
+  componentWillReceiveProps(props: BarThreadsPropsInterface) {
+    if (this.props.match.params.channel_id !== props.match.params.channel_id) {
+      this.currentChannel = this.getCurrentChannel(this.state.channels, props.match.params.channel_id)
+      this.setState({drawer: false});
+    }
   }
 
   openDialog() {
@@ -80,6 +90,15 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
   }
   closeDialog() {
     this.setState({dialog: false});
+  }
+
+  getCurrentChannel(channels: InlineResponse2003Results[], channel_id: string | undefined) {
+    let chan = channels.filter((v) => v.id?.toString() === channel_id);
+    if (chan.length == 1) {
+      return chan[0]
+    }
+
+    return undefined
   }
 
 
@@ -94,9 +113,12 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
               </IconButton>
               <Link href="/threads" color="inherit"><Typography variant="h6">n0bbs</Typography></Link>
               <div style={{ flexGrow: 1 }}></div>
-              <IconButton color="inherit" onClick={ this.openDialog }>
-                <AddCircleOutlineIcon />
-              </IconButton>
+
+              { this.props.match.params.channel_id !== undefined && 
+                <IconButton color="inherit" onClick={ this.openDialog }>
+                  <AddCircleOutlineIcon />
+                </IconButton>
+              }
               <IconButton color="inherit" href="/auth/logout">
                 <ExitToAppIcon />
               </IconButton>
@@ -104,7 +126,6 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
           </AppBar>
         </HideOnScroll>
         <Toolbar variant="dense" />
-        { this.props.children }
 
         <Drawer 
           open={ this.state.drawer } 
@@ -146,7 +167,12 @@ class Bar extends React.Component<BarThreadsPropsInterface, BarThreadsStateInter
           </List>
         </Drawer>
 
-        <ThreadDialog open={ this.state.dialog } onClose={ this.closeDialog } />
+        <ThreadDialog
+          open={ this.state.dialog }
+          onClose={ this.closeDialog }
+          channel={ this.currentChannel?.name !== undefined ? this.currentChannel?.name : "" }
+          channel_id={ this.currentChannel?.id !== undefined ? this.currentChannel?.id : 0 }
+        />
       </div>
     );
   }

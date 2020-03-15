@@ -29,14 +29,15 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/" component={Top}></Route>
         <AuthRequired>
-          <Bar>
-            <Switch>
-              <Route exact path="/threads" component={ThreadList}></Route>
-              <Route path="/channels/:channel_id" component={ThreadList}></Route>
-              <Route path="/threads/:id" component={ThreadDetails}></Route>
-              <Redirect to="/threads" />
-            </Switch>
-          </Bar>
+          <>
+              <Route path={["/threads", "/channels/:channel_id"]} component={Bar}></Route>
+              <Switch>
+                <Route exact path="/threads" component={ThreadList}></Route>
+                <Route path="/channels/:channel_id" component={ThreadList}></Route>
+                <Route path="/threads/:id" component={ThreadDetails}></Route>
+                <Redirect to="/threads" />
+              </Switch>
+          </>
         </AuthRequired>
       </Switch>
     </Router>
