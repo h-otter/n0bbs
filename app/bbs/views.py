@@ -89,14 +89,7 @@ class ThreadViewSet(mixins.CreateModelMixin,
     def get_queryset(self):
         user = self.request.user
 
-        channels = self.request.query_params.get('channels', None)
-
-        if channels:
-            channel_ids = channels.split(",")
-        else:
-            channel_ids = User.objects.first().channels.filter(state="JOINED").values_list('channel_id')
-
-        return Thread.objects.prefetch_related('channel').filter(channel_id__in=channel_ids).annotate(
+        queryset = Thread.objects.prefetch_related('channel').annotate(
             responses_count=Count('responses', distinct=True),
             read_responses_count=Max(Case(
                 When(read_log__user=user, then='read_log__response_count'),
@@ -105,6 +98,15 @@ class ThreadViewSet(mixins.CreateModelMixin,
             )),
             last_responded_at=Max('responses__responded_at'),
         ).order_by("-last_responded_at")
+
+        # TODO: channelを指定すると何でも見れてしまう
+        channels = self.request.query_params.get('channels', None)
+        if channels:
+            queryset = queryset.filter(channel_id__in=channels.split(","))
+        else:
+            queryset = queryset.filter(channel_id__in=user.channels.filter(state="JOINED").values_list('channel_id'))
+
+        return queryset
 
     # ココらへんは最悪だけど、妥協
     def perform_create(self, serializer):
