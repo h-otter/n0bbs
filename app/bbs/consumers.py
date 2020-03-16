@@ -2,7 +2,7 @@ import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from bbs.models import Response, ReadLog
+from bbs.models import Response, ReadLog, Thread
 
 
 class ThreadConsumer(AsyncWebsocketConsumer):
@@ -16,9 +16,19 @@ class ThreadConsumer(AsyncWebsocketConsumer):
 
         return list(res)
 
+    @database_sync_to_async
+    def getChannelRelation(self, thread_id, user):
+        return len(Thread.objects.get(id=thread_id).channel.users.filter(user=user).exclude(state="INVITED"))
+
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['thread_id']
         self.room_group_name = "thread-{}".format(self.room_name)
+        user = self.scope["user"]
+
+        cr = await self.getChannelRelation(self.room_name, user)
+        if cr == 0:
+            self.close()
+            return
 
         await self.channel_layer.group_add(
             self.room_group_name,
