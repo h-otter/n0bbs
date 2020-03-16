@@ -37,6 +37,13 @@ class ChannelViewSet(mixins.CreateModelMixin,
     serializer_class = ChannelSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+
+        queryset = Channel.objects.filter(users__user=user).order_by('name')
+
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
