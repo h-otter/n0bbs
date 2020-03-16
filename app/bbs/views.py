@@ -106,12 +106,14 @@ class ThreadViewSet(mixins.CreateModelMixin,
             last_responded_at=Max('responses__responded_at'),
         ).order_by("-last_responded_at")
 
-        # TODO: channelを指定すると何でも見れてしまう
+        # TODO: channel指定がない場合はJOINEDだけにする
+        channel_ids = set(map(lambda x: x[0], user.channels.exclude(state="INVITED").values_list('channel_id')))
+
         channels = self.request.query_params.get('channels', None)
         if channels:
-            queryset = queryset.filter(channel_id__in=channels.split(","))
-        else:
-            queryset = queryset.filter(channel_id__in=user.channels.filter(state="JOINED").values_list('channel_id'))
+            channel_ids = channel_ids & set(map(int, channels.split(",")))
+
+        queryset = queryset.filter(channel_id__in=channel_ids)
 
         return queryset
 
