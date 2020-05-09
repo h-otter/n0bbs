@@ -1,6 +1,7 @@
 import os
 import uuid
 import hashlib
+import datetime
 from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
@@ -92,6 +93,14 @@ class Response(models.Model):
             "display_name": self.display_name,
             "comment": html.escape(self.comment),
         }
+
+
+@receiver(post_save, sender=Response)
+def send_to_slack_after_1h(sender, instance, **kwargs):
+    diff = instance.thread.responses.order_by("-responded_at").all()[:2]
+    if len(diff) == 2 and diff[0].responded_at - diff[1].responded_at > datetime.timedelta(hours=1):
+        url =  "https://{}/threads/{}".format(settings.ALLOWED_HOSTS[0], instance.thread.id)
+        notify('「<{}|{}>」 に1時間ぶりの新規書き込み'.format(url, instance.thread.title))
 
 
 class ReadLog(models.Model):
